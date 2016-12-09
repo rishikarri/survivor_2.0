@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Survivor!</title>
+
+		<link rel="stylesheet" type="text/css" href="survivor-canvas-game.css">
+	</head>
+	<body>
+
+	<!-- This section will contain the score, the high score and the gold collected Score will be the total time alive, high score will update with the score and gold collected will go up whenever the user collects gold-->
+
+	<!-- This will also contain the buttons to start, stop and pause the game -->
+	
+	<div id="game-wrapper">
+		<div id="top-section">
+			<div id="game-stats">
+				<h2 id="scoreKeeper">Score: 0</h2>
+				<h2 id="highScoreKeeper">High Score: 0</h2>
+				<!-- <div id="treasure-chest">
+					<img src="Images/treasure-chest-2.png">
+
+				</div> -->
+				<p id="gold-collected"> Gold: 0</p>	
+				
+				<p id="health">20</p>
+			</div>
+
+			<div id="game-play-buttons">
+				<button onclick="startGame()">Start a New Game</button>
+				<button onclick="stopGame()">Stop Game</button>
+				<button onclick="resumeGame()">Resume Game</button>
+				<button onclick="newPlayer()">New Player</button>
+				<!-- Come back to returning player later -->
+				<button onclick="newPlayer()">Returning Player</button>
+			</div>
+
+			<div id="text-section">
+				<h2 id="textDisplay">&nbsp;</h2>
+			</div>
+		</div>
+
+		
+
+
+		<div id="middle-section">
+		<!-- holds the canvas  -->
+		</div>
+	</div>
+
+
+	<script type="text/javascript" src="survivor-canvas-game.js"></script>
+	</body>
+</html>
