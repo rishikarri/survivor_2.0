@@ -99,7 +99,7 @@ function Goblin(name){
 			// console.log(monsterNewDestinationY, monsterLocation.y);
 
 		}else{
-			this.y += 3 * goblinStats.speed;
+			this.y += 3 * this.speed;
 		}
 	}
 }
@@ -107,6 +107,8 @@ function Goblin(name){
 //figure out what you need to update constantly and then place it in the draw function
 function update(){
 	robinHood.move(keysPressed);
+	goblin1.move();
+	goblin2.move();
 }
 
 
@@ -115,6 +117,9 @@ function update(){
 var robinHood = new Hero("Robin Hood", "Images/robin-hood.png", 1);
 
 
+//create a goblin
+var goblin1 = new Goblin("goblin1");
+var goblin2 = new Goblin("goblin2");
 //can access his name with robinHood.name
 
 
@@ -124,7 +129,8 @@ function draw(){
 	update();
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
-
+	context.drawImage(goblin1.image, goblin1.x, goblin1.y);
+	context.drawImage(goblin2.image, goblin2.x, goblin2.y);
 	requestAnimationFrame(draw);
 
 }
