@@ -26,8 +26,10 @@ addEventListener("keydown", function(event){
 //CREATE CONSTRUCTORS
 
 //create a Hero constructor - takes in a name and an image to create a new one, for now we will only create one
+var shooting = false;
 function Hero(name, image, speed){
 	this.name = name; 
+	this.health = 20;
 	this.image = new Image();
 	this.image.src = image;
 	this.speed = speed; 
@@ -35,47 +37,39 @@ function Hero(name, image, speed){
 	this.y = 200;
 	this.arrowImage = new Image();
 	this.arrowImage.src = "Images/arrow-right.png";
+	// this function will follow the hero if he is not shooting
+	this.arrowFollow = function(){
+		if (!shooting){
+			this.arrowLocation.x = this.x + 20;
+			this.arrowLocation.y = this.y +4;
+		}
+	}
 	this.arrowLocation = {
 		x: 220, 
 		y: 204,
 		destinationX: 0,
 		destinationY: 0
 	}
-	//create a function native to 
+	// create a function native to the main character that allows him to move
 	this.move = function(keysPressed){
 		if(37 in keysPressed){
 			if (this.x >= 32){
 				this.x -= 7 * this.speed;
-
-		// 	if(!shooting){
-		// 	arrowLocation.x -= 7 * robinHoodStats.speed;
 			}
-		// }
 		}
 		if (38 in keysPressed){
 			if (this.y >= 30){
 				this.y -= 7 * this.speed;
-
-				// if(!shooting){
-				// arrowLocation.y -= 7 * robinHoodStats.speed;
-				// }
 			}
 		}
 		if (39 in keysPressed){
 			if (this.x <= 440){
 				this.x += 7 * this.speed;
-
-			// 	if(!shooting){
-			// 	arrowLocation.x += 7 * robinHoodStats.speed;
-			// 	}
 			}
 		}
 		if (40 in keysPressed){
 			if (this.y <= 405){
 				this.y += 7 * this.speed;
-				// if(!shooting){
-				// this.y += 7 * this.speed;
-				// }
 			}
 		}	
 	}
@@ -134,14 +128,34 @@ function Goblin(name){
 			this.y += 3 * this.speed;
 		}
 	}
+
+	this.catchRobinHood = function() {
+		// if this goblin is within 32 of robinhood, robinhood gets hurt
+		if(
+			Math.abs((this.x - robinHood.x)) < 32
+			&& Math.abs(this.y - robinHood.y) < 32
+		){
+		//robin hoood got hit
+			this.x = Math.random() * 440 + 40; 
+			this.y = Math.random() * 400 + 20; 
+			robinHood.health--;
+			document.getElementById("health").innerHTML = robinHood.health; 	
+		}
+	}
+
 }
+
+// Update function
 
 //figure out what you need to update constantly and then place it in the draw function
 function update(){
 	robinHood.move(keysPressed);
 	robinHood.shoot(keysPressed);
+	robinHood.arrowFollow();
 	goblin1.move();
 	goblin2.move();
+	goblin1.catchRobinHood();
+	goblin2.catchRobinHood();
 }
 
 
@@ -153,6 +167,8 @@ var robinHood = new Hero("Robin Hood", "Images/robin-hood.png", 1);
 //create a goblin
 var goblin1 = new Goblin("goblin1");
 var goblin2 = new Goblin("goblin2");
+
+
 //can access his name with robinHood.name
 
 
