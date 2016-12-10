@@ -101,6 +101,7 @@ function Hero(name, image, speed){
 
 function Goblin(name){
 	this.name = name; 
+	this.health = 3;
 	this.image = new Image();
 	this.image.src = "Images/goblin.png"
 	this.speed = 1; 
@@ -142,6 +143,32 @@ function Goblin(name){
 			document.getElementById("health").innerHTML = robinHood.health; 	
 		}
 	}
+	this.getHitByArrow = function() {
+		if (
+			Math.abs(robinHood.arrowLocation.x - this.x) < 15
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 15 
+		&& shooting === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= 1;
+			shooting = false;
+			robinHood.stopShooting();
+			console.log(this.name, this.health);
+			this.changeSpeed();
+		}
+	}
+	//changes the speed of the goblin and changes them to a coin if dead
+	this.changeSpeed = function() {
+		if (this.health == 2){
+			this.speed = .7; 
+		}else if(this.health == 1){
+			this.speed = .2;
+		}else if (this.health <= 0){
+			this.image.src = "Images/gold-coin.png";
+		}
+
+			
+	}
 
 }
 
@@ -152,10 +179,14 @@ function update(){
 	robinHood.move(keysPressed);
 	robinHood.shoot(keysPressed);
 	robinHood.arrowFollow();
-	goblin1.move();
-	goblin2.move();
-	goblin1.catchRobinHood();
-	goblin2.catchRobinHood();
+
+	// a for loop that goes through all necessary updates for all goblins
+	for (var i = 0; i < goblinArray.length; i++) {
+		goblinArray[i].move();
+		goblinArray[i].catchRobinHood();
+		goblinArray[i].getHitByArrow();
+	}
+	
 }
 
 
@@ -164,9 +195,14 @@ function update(){
 var robinHood = new Hero("Robin Hood", "Images/robin-hood.png", 1);
 
 
-//create a goblin
+//create goblins
+var goblin0 = new Goblin("goblin0");
 var goblin1 = new Goblin("goblin1");
-var goblin2 = new Goblin("goblin2");
+// create a goblin array
+var goblinArray = [];
+goblinArray.push(goblin0,goblin1);
+console.log(goblinArray);
+
 
 
 //can access his name with robinHood.name
@@ -179,10 +215,17 @@ function draw(){
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
-	context.drawImage(goblin1.image, goblin1.x, goblin1.y);
-	context.drawImage(goblin2.image, goblin2.x, goblin2.y);
+	//a for loop that draws and moves all the goblins in the arrray
+	for (var i = 0; i < goblinArray.length; i++) {
+		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
+	}
+	
 	requestAnimationFrame(draw);
 
 }
+
+for (var i = 0; i < goblinArray.length; i++) {
+		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
+	}
 
 draw();
