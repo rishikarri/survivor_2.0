@@ -3,12 +3,12 @@ var canvas = document.createElement("canvas");
 var context = canvas.getContext("2d");
 
 // set the canvas height and width 
-canvas.width = 512;
+canvas.width = 675;//RK COME BACK AND MAKE MARGIN ADJUSTMENTS ON ALL CHARACTERS !!! - means come back to
 canvas.height = 480; 
 
 document.getElementById("middle-section").appendChild(canvas);
 var backgroundImage = new Image(); 
-backgroundImage.src = "Images/background.png";
+backgroundImage.src = "Images/background2.jpeg";
 
 
 // CREATE EVENT LISTENERS
@@ -64,7 +64,7 @@ function Hero(name, image, speed){
 			}
 		}
 		if (39 in keysPressed){
-			if (this.x <= 440){
+			if (this.x <= 600){
 				this.x += 7 * this.speed;
 			}
 		}
