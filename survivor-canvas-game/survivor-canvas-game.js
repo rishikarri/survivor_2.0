@@ -30,6 +30,7 @@ var shooting = false;
 function Hero(name, image, speed){
 	this.name = name; 
 	this.health = 20;
+	this.gold = 0;
 	this.image = new Image();
 	this.image.src = image;
 	this.speed = speed; 
@@ -131,7 +132,7 @@ function Goblin(name){
 	}
 
 	this.catchRobinHood = function() {
-		// if this goblin is within 32 of robinhood, robinhood gets hurt
+		// if this goblin is within 32 of robinhood, robinhood gets hurt unless goblin is a coin
 		if(
 			Math.abs((this.x - robinHood.x)) < 32
 			&& Math.abs(this.y - robinHood.y) < 32
@@ -165,6 +166,7 @@ function Goblin(name){
 			this.speed = .2;
 		}else if (this.health <= 0){
 			this.image.src = "Images/gold-coin.png";
+				
 		}
 
 			
@@ -174,11 +176,14 @@ function Goblin(name){
 
 // Update function
 
+//check
+
 //figure out what you need to update constantly and then place it in the draw function
 function update(){
 	robinHood.move(keysPressed);
 	robinHood.shoot(keysPressed);
 	robinHood.arrowFollow();
+	checkGameStatus(robinHood.health);
 
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
@@ -189,6 +194,28 @@ function update(){
 	
 }
 
+var gameOn = true;
+//end game if player has 0 or less health
+function checkGameStatus(health){
+	if(health <= 0){
+		gameOn = false;
+		document.getElementById("textDisplay").innerHTML = "GAME OVER";
+	}
+}
+
+//program counterintervals
+var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+var goblinInterval = setInterval(generateGoblinNumber, 5000);
+
+var gameStartTime = Date.now(); //find out when the user started the game
+var score = 0;
+
+function updateCounter(){
+	//will need to add this player functionality
+	score++; 
+	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
+	
+}
 
 //create robinhood - create an image object and send it through to the constructore
 
@@ -201,7 +228,23 @@ var goblin1 = new Goblin("goblin1");
 // create a goblin array
 var goblinArray = [];
 goblinArray.push(goblin0,goblin1);
-console.log(goblinArray);
+
+var firstGoblinGeneratedNumber = 2;
+function generateGoblinNumber(){
+
+	var newGoblin = "goblin"+firstGoblinGeneratedNumber;
+	console.log(newGoblin);
+	firstGoblinGeneratedNumber++;
+	generateGoblin(newGoblin);
+	// var "goblin"+firstGoblinGeneratedNumber = new Goblin("newGoblin");
+	// firstGoblinGeneratedNumber++;
+}
+
+function generateGoblin(newGoblin){
+	var newGoblin = new Goblin(newGoblin);
+	goblinArray.push(newGoblin);
+	console.log(newGoblin);
+}
 
 
 
@@ -211,7 +254,9 @@ console.log(goblinArray);
 // need to draw the image constantly
 
 function draw(){
-	update();
+	if(gameOn){
+		update();
+	}
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
