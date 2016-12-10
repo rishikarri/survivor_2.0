@@ -33,6 +33,14 @@ function Hero(name, image, speed){
 	this.speed = speed; 
 	this.x = 200;
 	this.y = 200;
+	this.arrowImage = new Image();
+	this.arrowImage.src = "Images/arrow-right.png";
+	this.arrowLocation = {
+		x: 220, 
+		y: 204,
+		destinationX: 0,
+		destinationY: 0
+	}
 	//create a function native to 
 	this.move = function(keysPressed){
 		if(37 in keysPressed){
@@ -71,6 +79,30 @@ function Hero(name, image, speed){
 			}
 		}	
 	}
+
+	this.shoot = function(keysPressed){
+		if(32 in keysPressed){
+			//shooting prevents arrow from moving with character
+			shooting = true;
+			// if the spacebar is hit, shoot the arrow 50 pixels right, user can hold it to make it go farther
+			this.arrowLocation.destinationX = this.arrowLocation.x + 50; 
+		}
+		// if the arrow is within 10 pixels of its destination stop it
+		if(Math.abs(this.arrowLocation.x - this.arrowLocation.destinationX) < 10){
+			this.stopShooting();
+		}else{
+			if(this.arrowLocation.x < this.arrowLocation.destinationX && shooting == true){
+				this.arrowLocation.x += 6;
+			}
+		}
+	}
+	//when this is called, stop shooting and return the arrow to robinhood
+	this.stopShooting = function(){
+		shooting = false;
+		this.arrowLocation.x = this.x + 20;
+		this.arrowLocation.y = this.y + 4; 
+	}
+	
 }	
 
 function Goblin(name){
@@ -107,6 +139,7 @@ function Goblin(name){
 //figure out what you need to update constantly and then place it in the draw function
 function update(){
 	robinHood.move(keysPressed);
+	robinHood.shoot(keysPressed);
 	goblin1.move();
 	goblin2.move();
 }
@@ -129,6 +162,7 @@ function draw(){
 	update();
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
+	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
 	context.drawImage(goblin1.image, goblin1.x, goblin1.y);
 	context.drawImage(goblin2.image, goblin2.x, goblin2.y);
 	requestAnimationFrame(draw);
