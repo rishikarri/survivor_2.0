@@ -114,20 +114,20 @@ function Goblin(name){
 		if (Math.abs(this.x - this.destinationX) < 32) {
 			this.destinationX = Math.random() * 440 + 40; 
 		}else if(this.x < this.destinationX){
-			this.x += 2.5 * this.speed;
+			this.x += 2.8 * this.speed;
 			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
-			this.x -= 2.5 * this.speed;
+			this.x -= 2.8 * this.speed;
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
 			this.destinationY = Math.random() * 400 + 20; 
 		}else if(this.y > this.destinationY){
-			this.y -= 2.5 * this.speed;
+			this.y -= 2.8 * this.speed;
 			// console.log(monsterNewDestinationY, monsterLocation.y);
 
 		}else{
-			this.y += 2.5 * this.speed;
+			this.y += 2.8 * this.speed;
 		}
 	}
 
@@ -174,12 +174,14 @@ function Goblin(name){
 			// change image source to nothing and increase gold
 			this.image.src = "";
 			robinHood.gold += 5;
-			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;		
+			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;	
 
+			// CHANGE TEXT DISPLAY TO GOLD BEFOE DISPLAYING
+			document.getElementById("textDisplay").style.color = "goldenRod"; 
 			document.getElementById("textDisplay").innerHTML = "You collected " + 5 + " gold!";
 
 			// clear the text display after 2 seconds
-			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+			displayGold = setInterval(clearDisplay, 3000); //update the counter every second
 		}
 	}
 
@@ -267,6 +269,7 @@ function Thug(name){
 			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
 
 			//display the amount of gold Collected for 2 seconds
+			document.getElementById("textDisplay").style.color = "goldenRod"; 
 			document.getElementById("textDisplay").innerHTML = "You collected " + 7 + " gold!";
 
 			// clear the text display after 2 seconds
@@ -281,6 +284,9 @@ function clearDisplay(){
 	document.getElementById("textDisplay").innerHTML = "&nbsp";
 	// var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
 	clearInterval(displayGold);
+	//change it back to red for game over after display
+	document.getElementById("textDisplay").style.color = "red"; 
+
 
 
 
