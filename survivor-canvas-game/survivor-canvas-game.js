@@ -42,19 +42,19 @@ function Hero(name, image, speed){
 	this.arrowFollow = function(){
 		if (!shooting){
 			this.arrowLocation.x = this.x + 20;
-			this.arrowLocation.y = this.y +4;
+			this.arrowLocation.y = this.y +20;
 		}
 	}
 	this.arrowLocation = {
 		x: 220, 
-		y: 204,
+		y: 220,
 		destinationX: 0,
 		destinationY: 0
 	}
 	// create a function native to the main character that allows him to move
 	this.move = function(keysPressed){
 		if(37 in keysPressed){
-			if (this.x >= 32){
+			if (this.x >= 80){
 				this.x -= 7 * this.speed;
 			}
 		}
@@ -64,12 +64,12 @@ function Hero(name, image, speed){
 			}
 		}
 		if (39 in keysPressed){
-			if (this.x <= 600){
+			if (this.x <= 520){
 				this.x += 7 * this.speed;
 			}
 		}
 		if (40 in keysPressed){
-			if (this.y <= 405){
+			if (this.y <= 390){
 				this.y += 7 * this.speed;
 			}
 		}	
@@ -95,7 +95,7 @@ function Hero(name, image, speed){
 	this.stopShooting = function(){
 		shooting = false;
 		this.arrowLocation.x = this.x + 20;
-		this.arrowLocation.y = this.y + 4; 
+		this.arrowLocation.y = this.y + 20; 
 	}
 	
 }	
@@ -104,7 +104,7 @@ function Goblin(name){
 	this.name = name; 
 	this.health = 3;
 	this.image = new Image();
-	this.image.src = "Images/goblin.png"
+	this.image.src = "possible-enemies-allies/royalty goblin.png"
 	this.speed = 1; 
 	this.x = 300;
 	this.y = 200;
@@ -114,20 +114,20 @@ function Goblin(name){
 		if (Math.abs(this.x - this.destinationX) < 32) {
 			this.destinationX = Math.random() * 440 + 40; 
 		}else if(this.x < this.destinationX){
-			this.x += 3 * this.speed;
+			this.x += 2.5 * this.speed;
 			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
-			this.x -= 3 * this.speed;
+			this.x -= 2.5 * this.speed;
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
 			this.destinationY = Math.random() * 400 + 20; 
 		}else if(this.y > this.destinationY){
-			this.y -= 3 * this.speed;
+			this.y -= 2.5 * this.speed;
 			// console.log(monsterNewDestinationY, monsterLocation.y);
 
 		}else{
-			this.y += 3 * this.speed;
+			this.y += 2.5 * this.speed;
 		}
 	}
 
@@ -154,7 +154,6 @@ function Goblin(name){
 			this.health -= 1;
 			shooting = false;
 			robinHood.stopShooting();
-			console.log(this.name, this.health);
 			this.changeSpeed();
 		}
 	}
@@ -174,6 +173,103 @@ function Goblin(name){
 
 }
 
+function Thug(name){
+
+	this.name = name; 
+	this.health = 6;
+	this.image = new Image();
+	this.image.src = "possible-enemies-allies/thug.png";
+	this.speed = 1; 
+	this.x = 300;
+	this.y = 200;
+	this.move = function(){
+		if (Math.abs(this.x - robinHood.x) < 32) {
+			this.catchRobinHood();
+		}else if(this.x < robinHood.x){
+			this.x += 2 * this.speed;
+			// console.log(monsterNewDestinationX, monsterLocation.x);
+		}else{
+			this.x -= 2 * this.speed;
+		}
+		
+		if (Math.abs(this.y - robinHood.y) < 32) {
+			this.catchRobinHood();
+		}else if(this.y > robinHood.y){
+			this.y -= 2 * this.speed;
+			// console.log(monsterNewDestinationY, monsterLocation.y);
+
+		}else{
+			this.y += 2 * this.speed;
+		}
+	}
+
+	this.catchRobinHood = function() {
+		// if this goblin is within 32 of robinhood, robinhood gets hurt unless goblin is a coin
+		if(
+			Math.abs((this.x - robinHood.x)) < 32
+			&& Math.abs(this.y - robinHood.y) < 32
+		){
+
+			// don't need the above code bedaduse you catch robinhood if you get close to him
+			//generate new location if you hit him
+		//robin hoood got hit
+			this.x = Math.random() * 440 + 40; 
+			this.y = Math.random() * 400 + 20; 
+			robinHood.health--;
+			document.getElementById("health").innerHTML = robinHood.health; 	
+		}
+		
+	}
+	this.getHitByArrow = function() {
+		if (
+			Math.abs(robinHood.arrowLocation.x - this.x) < 15
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 28
+		&& shooting === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= 1;
+			shooting = false;
+			robinHood.stopShooting();
+			this.changeSpeed();
+		}
+	}
+	//changes the speed of the goblin and changes them to a coin if dead
+	this.changeSpeed = function() {
+		if (this.health == 5){
+			this.speed = .7; 
+		}else if(this.health == 3){
+			this.speed = .3;
+		}else if(this.health == 1){
+			this.speed = .05;
+		}
+		else if (this.health <= 0){
+			this.image.src = "Images/gold-coin.png";
+			// get thug's number
+			var thugNumber = this.name.slice(4);
+
+			//change property in thug array to do nothing
+			thugArray[thugNumber] = "do nothing";
+		
+		}
+
+			
+	}
+
+}
+
+
+//code to create coin 
+
+function Coin(x, y, goldAmount){
+	this.image = new Image(); 
+	this.image.src = "Images/gold-coin.png";
+	this.x = x;
+	this.y = y; 
+	this.goldAmount = goldAmount;
+	checkIfCollected(); 
+	
+}
+
 // Update function
 
 //check
@@ -191,7 +287,18 @@ function update(){
 		goblinArray[i].catchRobinHood();
 		goblinArray[i].getHitByArrow();
 	}
-	
+	//a for loop that goes through all necessary updates for all thugs
+	for (var i = 0; i < thugArray.length; i++) {
+
+		if (thugArray[i] === "do nothing"){
+			console.log("do nothing");
+		}else{
+		thugArray[i].move();
+		thugArray[i].catchRobinHood();
+		thugArray[i].getHitByArrow();
+		}
+	}
+
 }
 
 var gameOn = true;
@@ -206,6 +313,7 @@ function checkGameStatus(health){
 //program counterintervals
 var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
 var goblinInterval = setInterval(generateGoblinNumber, 5000);
+var thugInterval = setInterval(generateThugNumber, 7000);
 
 var gameStartTime = Date.now(); //find out when the user started the game
 var score = 0;
@@ -219,21 +327,17 @@ function updateCounter(){
 
 //create robinhood - create an image object and send it through to the constructore
 
-var robinHood = new Hero("Robin Hood", "Images/robin-hood.png", 1);
+var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
 
 //create goblins
 var goblin0 = new Goblin("goblin0");
 var goblin1 = new Goblin("goblin1");
-// create a goblin array
-var goblinArray = [];
-goblinArray.push(goblin0,goblin1);
 
 var firstGoblinGeneratedNumber = 2;
 function generateGoblinNumber(){
 
 	var newGoblin = "goblin"+firstGoblinGeneratedNumber;
-	console.log(newGoblin);
 	firstGoblinGeneratedNumber++;
 	generateGoblin(newGoblin);
 	// var "goblin"+firstGoblinGeneratedNumber = new Goblin("newGoblin");
@@ -243,8 +347,34 @@ function generateGoblinNumber(){
 function generateGoblin(newGoblin){
 	var newGoblin = new Goblin(newGoblin);
 	goblinArray.push(newGoblin);
-	console.log(newGoblin);
 }
+
+// create a goblin array
+var goblinArray = [];
+goblinArray.push(goblin0,goblin1);
+
+//create some thugs
+var thugArray = []; 
+var thug0 = new Thug("thug0");
+thugArray.push(thug0);
+var firstThugGeneratedNumber = 1;
+
+function generateThugNumber(){
+	var newThug = "thug"+firstThugGeneratedNumber;
+	firstThugGeneratedNumber++;
+	generateThug(newThug);
+}
+
+function generateThug(newThug){
+	var newThug = new Thug(newThug);
+	thugArray.push(newThug);
+	console.log(newThug);
+}
+
+
+
+
+
 
 
 
@@ -264,13 +394,23 @@ function draw(){
 	for (var i = 0; i < goblinArray.length; i++) {
 		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
 	}
+	// Draw the thug on the page
+	context.drawImage(thug0.image, thug0.x, thug0.y);
 	
 	requestAnimationFrame(draw);
 
+	for (var i = 0; i < thugArray.length; i++) {
+
+		if (thugArray[i] === "do nothing"){
+			//do nothing
+			console.log("hi");
+		}else{
+		context.drawImage(thugArray[i].image, thugArray[i].x, thugArray[i].y);
+		}
+	}
+
 }
 
-for (var i = 0; i < goblinArray.length; i++) {
-		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
-	}
+	
 
 draw();
