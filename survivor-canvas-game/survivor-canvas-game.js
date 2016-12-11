@@ -147,7 +147,7 @@ function Goblin(name){
 	this.getHitByArrow = function() {
 		if (
 			Math.abs(robinHood.arrowLocation.x - this.x) < 15
-		&& Math.abs(robinHood.arrowLocation.y - this.y) < 15 
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 28 
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
@@ -165,10 +165,22 @@ function Goblin(name){
 			this.speed = .2;
 		}else if (this.health <= 0){
 			this.image.src = "Images/gold-coin.png";
-				
-		}
+			var goblinNumber = this.name.slice(6);
+			console.log(goblinNumber);
 
-			
+			//change property in thug array to do nothing
+			goblinArray[goblinNumber] = "do nothing";
+
+			// change image source to nothing and increase gold
+			this.image.src = "";
+			robinHood.gold += 5;
+			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;		
+
+			document.getElementById("textDisplay").innerHTML = "You collected " + 5 + " gold!";
+
+			// clear the text display after 2 seconds
+			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+		}
 	}
 
 }
@@ -243,32 +255,39 @@ function Thug(name){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
-			this.image.src = "Images/gold-coin.png";
-			// get thug's number
 			var thugNumber = this.name.slice(4);
+			console.log(thugNumber);
 
 			//change property in thug array to do nothing
 			thugArray[thugNumber] = "do nothing";
-		
-		}
 
-			
+			// change image source to nothing and increase gold
+			this.image.src = "";
+			robinHood.gold += 7;
+			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+
+			//display the amount of gold Collected for 2 seconds
+			document.getElementById("textDisplay").innerHTML = "You collected " + 7 + " gold!";
+
+			// clear the text display after 2 seconds
+			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+
+		}	
 	}
 
 }
+var displayGold;//need to define out here for global scope 
+function clearDisplay(){
+	document.getElementById("textDisplay").innerHTML = "&nbsp";
+	// var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+	clearInterval(displayGold);
 
 
-//code to create coin 
 
-function Coin(x, y, goldAmount){
-	this.image = new Image(); 
-	this.image.src = "Images/gold-coin.png";
-	this.x = x;
-	this.y = y; 
-	this.goldAmount = goldAmount;
-	checkIfCollected(); 
-	
 }
+
+
+
 
 // Update function
 
@@ -283,19 +302,24 @@ function update(){
 
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
-		goblinArray[i].move();
-		goblinArray[i].catchRobinHood();
-		goblinArray[i].getHitByArrow();
+		if(goblinArray[i] === "do nothing"){
+			console.log("do nothing - goblin")
+		}else{
+			goblinArray[i].move();
+			goblinArray[i].catchRobinHood();
+			goblinArray[i].getHitByArrow();
+		}
+		
 	}
 	//a for loop that goes through all necessary updates for all thugs
 	for (var i = 0; i < thugArray.length; i++) {
 
 		if (thugArray[i] === "do nothing"){
-			console.log("do nothing");
+			console.log("do nothing - thug");
 		}else{
-		thugArray[i].move();
-		thugArray[i].catchRobinHood();
-		thugArray[i].getHitByArrow();
+			thugArray[i].move();
+			thugArray[i].catchRobinHood();
+			thugArray[i].getHitByArrow();
 		}
 	}
 
@@ -368,7 +392,7 @@ function generateThugNumber(){
 function generateThug(newThug){
 	var newThug = new Thug(newThug);
 	thugArray.push(newThug);
-	console.log(newThug);
+	
 }
 
 
@@ -392,7 +416,12 @@ function draw(){
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
 	//a for loop that draws and moves all the goblins in the arrray
 	for (var i = 0; i < goblinArray.length; i++) {
+
+		if (goblinArray[i] === "do nothing") {
+
+		}else{
 		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
+		}
 	}
 	// Draw the thug on the page
 	context.drawImage(thug0.image, thug0.x, thug0.y);
