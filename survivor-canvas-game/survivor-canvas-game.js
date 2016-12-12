@@ -24,6 +24,7 @@ addEventListener("keydown", function(event){
 })
 
 //CREATE CONSTRUCTORS
+//
 
 //create a Hero constructor - takes in a name and an image to create a new one, for now we will only create one
 var shooting = false;
