@@ -11,6 +11,13 @@ var backgroundImage = new Image();
 backgroundImage.src = "Images/background2.jpeg";
 
 
+// ----------------------------------------------------------
+// ----------------------GLOBALS-----------------------------
+// ----------------------------------------------------------
+
+
+
+
 // CREATE EVENT LISTENERS
 
 var keysPressed = []; //array that holds whats in the array
@@ -37,18 +44,27 @@ function Hero(name, image, speed){
 	this.speed = speed; 
 	this.x = 200;
 	this.y = 200;
+	this.faceLeft = false;
 	this.arrowImage = new Image();
 	this.arrowImage.src = "Images/arrow-right.png";
 	// this function will follow the hero if he is not shooting
 	this.arrowFollow = function(){
 		if (!shooting){
-			this.arrowLocation.x = this.x + 20;
-			this.arrowLocation.y = this.y +20;
+			if(this.faceLeft){
+				this.arrowLocation.x = this.x - 4;
+				this.arrowLocation.y = this.y + 18;
+				
+			}else if(!this.faceLeft){
+				this.arrowLocation.x = this.x + 22;
+				this.arrowLocation.y = this.y + 18;
+				
+			}
 		}
 	}
+
 	this.arrowLocation = {
-		x: 220, 
-		y: 220,
+		x: 222, 
+		y: 218,
 		destinationX: 0,
 		destinationY: 0
 	}
@@ -57,6 +73,13 @@ function Hero(name, image, speed){
 		if(37 in keysPressed){
 			if (this.x >= 80){
 				this.x -= 7 * this.speed;
+				// Make archer look left if he is moving left - do the same with arrow
+				this.image.src = "possible-enemies-allies/archer3-left.png";
+				this.arrowImage.src = "Images/arrow-left.png";
+				// this.arrowLocation.x = this.x - 4; 
+				// this.arrowLocation.y = this.y + 18;
+				this.faceLeft = true;
+
 			}
 		}
 		if (38 in keysPressed){
@@ -67,6 +90,12 @@ function Hero(name, image, speed){
 		if (39 in keysPressed){
 			if (this.x <= 520){
 				this.x += 7 * this.speed;
+				this.image.src = "possible-enemies-allies/archer3.png";
+				this.arrowImage.src = "Images/arrow-right.png";
+				// this.arrowLocation.x = this.x + 22;
+				// this.arrowLocation.y = this.y + 18;
+				this.faceLeft = false;
+				
 			}
 		}
 		if (40 in keysPressed){
@@ -77,19 +106,48 @@ function Hero(name, image, speed){
 	}
 
 	this.shoot = function(keysPressed){
-		if(32 in keysPressed){
+
+		
+		if(68 in keysPressed){
 			//shooting prevents arrow from moving with character
 			shooting = true;
 			// if the spacebar is hit, shoot the arrow 50 pixels right, user can hold it to make it go farther
 			this.arrowLocation.destinationX = this.arrowLocation.x + 50; 
+			
+			// change image source and make sure the character is facing right
+			this.image.src = "possible-enemies-allies/archer3.png";
+			this.faceLeft = false;
+			this.arrowImage.src = "Images/arrow-right.png";
+
+		}else if(65 in keysPressed){
+			shooting = true;
+			this.arrowLocation.destinationX = this.arrowLocation.x - 100; 
+			console.log("hi");
+			console.log(this.arrowLocation.destinationX);
+
+			// change the image source and make sure the character is shooting left
+			this.image.src = "possible-enemies-allies/archer3-left.png";
+			this.faceLeft = true;
+			this.arrowImage.src = "Images/arrow-left.png";
+
+		}else {
+			shooting = false;
+			this.stopShooting();
 		}
+
+		
 		// if the arrow is within 10 pixels of its destination stop it
 		if(Math.abs(this.arrowLocation.x - this.arrowLocation.destinationX) < 10){
 			this.stopShooting();
 		}else{
+			//if the arrow is not within 10 pixels of its destination, keep it going
 			if(this.arrowLocation.x < this.arrowLocation.destinationX && shooting == true){
 				this.arrowLocation.x += 6;
-			}
+				console.log("hi right");
+			}else if(this.arrowLocation.x > this.arrowLocation.destinationX && shooting == true){
+				this.arrowLocation.x -= 6;
+				console.log("hi left");
+			}								
 		}
 	}
 	//when this is called, stop shooting and return the arrow to robinhood
@@ -117,7 +175,6 @@ function Goblin(name){
 		}else if(this.x < this.destinationX){
 			this.x += 2.8 * this.speed;
 			this.image.src = "possible-enemies-allies/royalty-goblin-right.png";
-			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
 			this.x -= 2.8 * this.speed;
 			this.image.src = "possible-enemies-allies/royalty goblin-left.png";
@@ -127,8 +184,6 @@ function Goblin(name){
 			this.destinationY = Math.random() * 400 + 20; 
 		}else if(this.y > this.destinationY){
 			this.y -= 2.8 * this.speed;
-			// console.log(monsterNewDestinationY, monsterLocation.y);
-
 		}else{
 			this.y += 2.8 * this.speed;
 		}
@@ -204,9 +259,11 @@ function Thug(name){
 			this.catchRobinHood();
 		}else if(this.x < robinHood.x){
 			this.x += 2 * this.speed;
+			this.image.src = "possible-enemies-allies/thug.png";
 			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
 			this.x -= 2 * this.speed;
+			this.image.src = "possible-enemies-allies/thug-left.png";
 		}
 		
 		if (Math.abs(this.y - robinHood.y) < 32) {
@@ -312,7 +369,7 @@ function update(){
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
 		if(goblinArray[i] === "do nothing"){
-			console.log("do nothing - goblin")
+		
 		}else{
 			goblinArray[i].move();
 			goblinArray[i].catchRobinHood();
@@ -324,7 +381,7 @@ function update(){
 	for (var i = 0; i < thugArray.length; i++) {
 
 		if (thugArray[i] === "do nothing"){
-			console.log("do nothing - thug");
+			
 		}else{
 			thugArray[i].move();
 			thugArray[i].catchRobinHood();
