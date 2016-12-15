@@ -116,9 +116,11 @@ function Goblin(name){
 			this.destinationX = Math.random() * 440 + 40; 
 		}else if(this.x < this.destinationX){
 			this.x += 2.8 * this.speed;
+			this.image.src = "possible-enemies-allies/royalty-goblin-right.png";
 			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
 			this.x -= 2.8 * this.speed;
+			this.image.src = "possible-enemies-allies/royalty goblin-left.png";
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
@@ -417,6 +419,8 @@ function generateThug(newThug){
 function draw(){
 	if(gameOn){
 		update();
+	}else{
+		clearInterval(counterInterval);
 	}
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
