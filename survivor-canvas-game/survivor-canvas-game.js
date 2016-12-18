@@ -177,19 +177,19 @@ function Goblin(name){
 		if (Math.abs(this.x - this.destinationX) < 32) {
 			this.destinationX = Math.random() * 440 + 40; 
 		}else if(this.x < this.destinationX){
-			this.x += 2.8 * this.speed;
+			this.x += 2.94 * this.speed;
 			this.image.src = "possible-enemies-allies/royalty-goblin-right.png";
 		}else{
-			this.x -= 2.8 * this.speed;
+			this.x -= 2.94 * this.speed;
 			this.image.src = "possible-enemies-allies/royalty goblin-left.png";
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
 			this.destinationY = Math.random() * 400 + 20; 
 		}else if(this.y > this.destinationY){
-			this.y -= 2.8 * this.speed;
+			this.y -= 2.94 * this.speed;
 		}else{
-			this.y += 2.8 * this.speed;
+			this.y += 2.94 * this.speed;
 		}
 	}
 
@@ -263,7 +263,6 @@ function Thug(name){
 		}else if(this.x < robinHood.x){
 			this.x += 2 * this.speed;
 			this.image.src = "possible-enemies-allies/thug.png";
-			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
 			this.x -= 2 * this.speed;
 			this.image.src = "possible-enemies-allies/thug-left.png";
@@ -272,8 +271,7 @@ function Thug(name){
 		if (Math.abs(this.y - robinHood.y) < 32) {
 			this.catchRobinHood();
 		}else if(this.y > robinHood.y){
-			this.y -= 2 * this.speed;
-			// console.log(monsterNewDestinationY, monsterLocation.y);
+			this.y -= 2 * this.speed;			
 
 		}else{
 			this.y += 2 * this.speed;
@@ -348,32 +346,26 @@ function Golem(name){
 	this.health = 150;
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/golem1.png";
-	this.speed = .8; 
+	this.speed = 1; 
 	this.x = 300;
 	this.y = 200;
 	this.move = function(){
 		if (Math.abs(this.x - robinHood.x) < 32) {
 			this.catchRobinHood();
 		}else if(this.x < robinHood.x){
-			this.x += 2 * this.speed;
-			console.log("hi");
-			this.image.src="possible-enemies-allies/golem1.png";
-			// this.image.src = "possible-enemies-allies/golem.png";
-			// console.log(monsterNewDestinationX, monsterLocation.x);
+			this.x += 1.3 * this.speed;	
+			this.image.src="possible-enemies-allies/golem1.png";			
 		}else{
-			this.x -= 2 * this.speed;
-			this.image.src="possible-enemies-allies/golem-face-left.png";
-			// this.image.src = "possible-enemies-allies/thug-left.png";
+			this.x -= 1.3 * this.speed;
+			this.image.src="possible-enemies-allies/golem-face-left.png";			
 		}
 		
 		if (Math.abs(this.y - robinHood.y) < 32) {
 			this.catchRobinHood();
 		}else if(this.y > robinHood.y){
-			this.y -= 2 * this.speed;
-			// console.log(monsterNewDestinationY, monsterLocation.y);
-
+			this.y -= 1.3 * this.speed;			
 		}else{
-			this.y += 2 * this.speed;
+			this.y += 1.3 * this.speed;
 		}
 	}
 
@@ -420,7 +412,7 @@ function Golem(name){
 			console.log(golemNumber);
 
 			//change property in thug array to do nothing
-			// golemArray[golemNumber] = "do nothing";
+			golemArray[golemNumber] = "do nothing";
 
 			// change image source to nothing and increase gold
 			this.image.src = "";
@@ -467,8 +459,8 @@ function clearDisplay(){
 
 //program counterintervals
 var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
-var goblinInterval = setInterval(generateGoblinNumber, 5000);
-var thugInterval = setInterval(generateThugNumber, 7000);
+
+
 
 var gameStartTime = Date.now(); //find out when the user started the game
 var score = 0;
@@ -485,7 +477,10 @@ function updateCounter(){
 var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
 
-// ----GOBLINS---------------
+// ----------------------GOBLINS-----------------------------
+
+var goblinInterval = setInterval(generateGoblinNumber, 5000);
+
 var goblin0 = new Goblin("goblin0");
 var goblin1 = new Goblin("goblin1");
 
@@ -511,15 +506,17 @@ function generateGoblin(newGoblin){
 var goblinArray = [];
 goblinArray.push(goblin0,goblin1);
 
-// ----THUGS---------------
+// ----------------------THUGS-----------------------------
+var thugInterval = setInterval(generateThugNumber, 7000);
+
 var thugArray = []; 
 var thug0 = new Thug("thug0");
 thugArray.push(thug0);
-var firstThugGeneratedNumber = 1;
+var thugNumber = 1;
 
 function generateThugNumber(){
-	var newThug = "thug"+firstThugGeneratedNumber;
-	firstThugGeneratedNumber++;
+	var newThug = "thug"+thugNumber;
+	thugNumber++;
 	generateThug(newThug);
 }
 
@@ -528,16 +525,35 @@ function generateThug(newThug){
 	thugArray.push(newThug);
 	
 }
+// ----------------------GOLEMS-----------------------------
+
+var golemInterval = setInterval(generateGolemNumber, 28000);
 
 //create a golem
 var golem0 = new Golem("golem0");
+//empty golemArray and then you push golem0 to the golem array  
+var golemArray = []; 
+golemArray.push(golem0);
+var golemNumber = 1; 
 
+function generateGolemNumber(){
+	var newGolem = "golem" + golemNumber;
+	golemNumber++;
+	generateGolem(newGolem);
+}
+
+function generateGolem(newGolem){
+	var golem = new Golem(newGolem);
+	console.log(golem);
+	golemArray.push(golem);
+	
+}
 
 
 
 
 // ----------------------------------------------------------
-// ----UPDATE AND DRAW SECTIONS BELOW------------------------
+// ----------------UPDATE AND DRAW SECTIONS BELOW------------
 // ----------------------------------------------------------
 
 
@@ -548,9 +564,9 @@ function update(){
 	checkGameStatus(robinHood.health);
 
 	//create golem
-	golem0.move();
-	golem0.catchRobinHood();
-	golem0.getHitByArrow();
+	// golem0.move();
+	// golem0.catchRobinHood();
+	// golem0.getHitByArrow();
 
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
@@ -558,6 +574,8 @@ function update(){
 		
 		}else{
 			goblinArray[i].move();
+			//need to add catch robinhood function for goblins because they move randomly
+			goblinArray[i].catchRobinHood();
 			goblinArray[i].getHitByArrow();
 		}
 		
@@ -570,6 +588,16 @@ function update(){
 		}else{
 			thugArray[i].move();
 			thugArray[i].getHitByArrow();
+		}
+	}
+
+	for (var i = 0; i < golemArray.length; i++) {
+
+		if (golemArray[i] === "do nothing"){
+			
+		}else{
+			golemArray[i].move();
+			golemArray[i].getHitByArrow();
 		}
 	}
 
@@ -594,7 +622,7 @@ function draw(){
 
 	
 	context.drawImage(backgroundImage, 0, 0);
-	context.drawImage(golem0.image, golem0.x, golem0.y);
+	// context.drawImage(golem0.image, golem0.x, golem0.y);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
 	//a for loop that draws and moves all the goblins in the arrray
@@ -603,7 +631,7 @@ function draw(){
 		if (goblinArray[i] === "do nothing") {
 
 		}else{
-		context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
+			context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
 		}
 	}
 	// Draw the thug on the page
@@ -617,7 +645,17 @@ function draw(){
 			//do nothing
 			
 		}else{
-		context.drawImage(thugArray[i].image, thugArray[i].x, thugArray[i].y);
+			context.drawImage(thugArray[i].image, thugArray[i].x, thugArray[i].y);
+		}
+	}
+
+	for (var i = 0; i < golemArray.length; i++) {
+
+		if (golemArray[i] === "do nothing"){
+			//do nothing
+			
+		}else{
+			context.drawImage(golemArray[i].image, golemArray[i].x, golemArray[i].y);
 		}
 	}
 
