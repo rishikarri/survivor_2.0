@@ -21,6 +21,7 @@ backgroundImage.src = "Images/background2.jpeg";
 // CREATE EVENT LISTENERS
 
 var keysPressed = []; //array that holds whats in the array
+var displayGold;//need to define out here for global scope 
 
 addEventListener("keyup", function(event){
 	delete keysPressed[event.keyCode];
@@ -155,6 +156,12 @@ function Hero(name, image, speed){
 	}
 	
 }	
+
+// ----------------------------------------------------------
+// ------------MONSTER AND ALLY CONSTRUCTORS BELOW-----------
+// ----------------------------------------------------------
+
+
 
 function Goblin(name){
 	this.name = name; 
@@ -350,10 +357,12 @@ function Golem(name){
 		}else if(this.x < robinHood.x){
 			this.x += 2 * this.speed;
 			console.log("hi");
+			this.image.src="possible-enemies-allies/golem1.png";
 			// this.image.src = "possible-enemies-allies/golem.png";
 			// console.log(monsterNewDestinationX, monsterLocation.x);
 		}else{
 			this.x -= 2 * this.speed;
+			this.image.src="possible-enemies-allies/golem-face-left.png";
 			// this.image.src = "possible-enemies-allies/thug-left.png";
 		}
 		
@@ -420,16 +429,16 @@ function Golem(name){
 
 			//display the amount of gold Collected for 2 seconds
 			document.getElementById("textDisplay").style.color = "goldenRod"; 
-			document.getElementById("textDisplay").innerHTML = "You collected " + 7 + " gold!";
+			document.getElementById("textDisplay").innerHTML = "You collected " + 40 + " gold!";
 
 			// clear the text display after 2 seconds
-			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+			displayGold = setInterval(clearDisplay, 3000); //update the counter every second
 
 		}	
 	}
 
 }
-var displayGold;//need to define out here for global scope 
+
 function clearDisplay(){
 	document.getElementById("textDisplay").innerHTML = "&nbsp";
 	// var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
@@ -608,5 +617,5 @@ function draw(){
 }
 
 	
+draw();	
 
-draw();
