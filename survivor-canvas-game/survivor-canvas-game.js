@@ -3,7 +3,7 @@ var canvas = document.createElement("canvas");
 var context = canvas.getContext("2d");
 
 // set the canvas height and width 
-canvas.width = 675;//RK COME BACK AND MAKE MARGIN ADJUSTMENTS ON ALL CHARACTERS !!! - means come back to
+canvas.width = 675;
 canvas.height = 480; 
 
 document.getElementById("middle-section").appendChild(canvas);
@@ -122,8 +122,7 @@ function Hero(name, image, speed){
 		}else if(65 in keysPressed){
 			shooting = true;
 			this.arrowLocation.destinationX = this.arrowLocation.x - 100; 
-			console.log("hi");
-			console.log(this.arrowLocation.destinationX);
+			
 
 			// change the image source and make sure the character is shooting left
 			this.image.src = "possible-enemies-allies/archer3-left.png";
@@ -142,11 +141,9 @@ function Hero(name, image, speed){
 		}else{
 			//if the arrow is not within 10 pixels of its destination, keep it going
 			if(this.arrowLocation.x < this.arrowLocation.destinationX && shooting == true){
-				this.arrowLocation.x += 6;
-				console.log("hi right");
+				this.arrowLocation.x += 6;				
 			}else if(this.arrowLocation.x > this.arrowLocation.destinationX && shooting == true){
 				this.arrowLocation.x -= 6;
-				console.log("hi left");
 			}								
 		}
 	}
@@ -223,8 +220,7 @@ function Goblin(name){
 			this.speed = .2;
 		}else if (this.health <= 0){
 			this.image.src = "Images/gold-coin.png";
-			var goblinNumber = this.name.slice(6);
-			console.log(goblinNumber);
+			var goblinNumber = this.name.slice(6);		
 
 			//change property in thug array to do nothing
 			goblinArray[goblinNumber] = "do nothing";
@@ -317,8 +313,7 @@ function Thug(name){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
-			var thugNumber = this.name.slice(4);
-			console.log(thugNumber);
+			var thugNumber = this.name.slice(4);			
 
 			//change property in thug array to do nothing
 			thugArray[thugNumber] = "do nothing";
@@ -326,6 +321,102 @@ function Thug(name){
 			// change image source to nothing and increase gold
 			this.image.src = "";
 			robinHood.gold += 7;
+			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+
+			//display the amount of gold Collected for 2 seconds
+			document.getElementById("textDisplay").style.color = "goldenRod"; 
+			document.getElementById("textDisplay").innerHTML = "You collected " + 7 + " gold!";
+
+			// clear the text display after 2 seconds
+			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+
+		}	
+	}
+
+}
+//let's create a golem
+function Golem(name){
+
+	this.name = name; 
+	this.health = 500;
+	this.image = new Image();
+	this.image.src = "possible-enemies-allies/golem1.png";
+	this.speed = .8; 
+	this.x = 300;
+	this.y = 200;
+	this.move = function(){
+		if (Math.abs(this.x - robinHood.x) < 32) {
+			this.catchRobinHood();
+		}else if(this.x < robinHood.x){
+			this.x += 2 * this.speed;
+			console.log("hi");
+			// this.image.src = "possible-enemies-allies/golem.png";
+			// console.log(monsterNewDestinationX, monsterLocation.x);
+		}else{
+			this.x -= 2 * this.speed;
+			// this.image.src = "possible-enemies-allies/thug-left.png";
+		}
+		
+		if (Math.abs(this.y - robinHood.y) < 32) {
+			this.catchRobinHood();
+		}else if(this.y > robinHood.y){
+			this.y -= 2 * this.speed;
+			// console.log(monsterNewDestinationY, monsterLocation.y);
+
+		}else{
+			this.y += 2 * this.speed;
+		}
+	}
+
+	this.catchRobinHood = function() {
+		// if this goblin is within 32 of robinhood, robinhood gets hurt unless goblin is a coin
+		if(
+			Math.abs((this.x - robinHood.x)) < 32
+			&& Math.abs(this.y - robinHood.y) < 32
+		){
+
+			// don't need the above code bedaduse you catch robinhood if you get close to him
+			//generate new location if you hit him
+		//robin hoood got hit
+			this.x = Math.random() * 440 + 40; 
+			this.y = Math.random() * 400 + 20; 
+			robinHood.health--;
+			document.getElementById("health").innerHTML = robinHood.health; 	
+		}
+		
+	}
+	this.getHitByArrow = function() {
+		if (
+			Math.abs(robinHood.arrowLocation.x - this.x) < 30
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 50
+		&& shooting === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= 1;
+			shooting = false;
+			robinHood.stopShooting();
+			this.changeSpeed();
+		}
+	}
+	//changes the speed of the goblin and changes them to a coin if dead
+	this.changeSpeed = function() {
+		if (this.health == 300){
+			this.speed = .4; 
+		}else if(this.health == 100){
+			this.speed = .2;
+		}else if(this.health == 20){
+			this.speed = .05;
+		}
+		else if (this.health <= 0){
+			var golemNumber = this.name.slice(4);
+			console.log(golemNumber);
+
+			//change property in thug array to do nothing
+			// golemArray[golemNumber] = "do nothing";
+
+			// change image source to nothing and increase gold
+			this.image.src = "";
+			robinHood.gold += 40;
 			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
 
 			//display the amount of gold Collected for 2 seconds
@@ -366,13 +457,17 @@ function update(){
 	robinHood.arrowFollow();
 	checkGameStatus(robinHood.health);
 
+	//create golem
+	golem0.move();
+	golem0.catchRobinHood();
+	golem0.getHitByArrow();
+
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
 		if(goblinArray[i] === "do nothing"){
 		
 		}else{
 			goblinArray[i].move();
-			goblinArray[i].catchRobinHood();
 			goblinArray[i].getHitByArrow();
 		}
 		
@@ -384,7 +479,6 @@ function update(){
 			
 		}else{
 			thugArray[i].move();
-			thugArray[i].catchRobinHood();
 			thugArray[i].getHitByArrow();
 		}
 	}
@@ -423,6 +517,9 @@ var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 //create goblins
 var goblin0 = new Goblin("goblin0");
 var goblin1 = new Goblin("goblin1");
+
+//create a golem
+var golem0 = new Golem("golem0");
 
 var firstGoblinGeneratedNumber = 2;
 function generateGoblinNumber(){
@@ -479,6 +576,8 @@ function draw(){
 	}else{
 		clearInterval(counterInterval);
 	}
+
+	context.drawImage(golem0.image, golem0.x, golem0.y);
 	context.drawImage(backgroundImage, 0, 0);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
@@ -500,7 +599,7 @@ function draw(){
 
 		if (thugArray[i] === "do nothing"){
 			//do nothing
-			console.log("hi");
+			
 		}else{
 		context.drawImage(thugArray[i].image, thugArray[i].x, thugArray[i].y);
 		}
