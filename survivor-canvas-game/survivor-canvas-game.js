@@ -338,7 +338,7 @@ function Thug(name){
 function Golem(name){
 
 	this.name = name; 
-	this.health = 500;
+	this.health = 150;
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/golem1.png";
 	this.speed = .8; 
@@ -375,7 +375,6 @@ function Golem(name){
 			&& Math.abs(this.y - robinHood.y) < 32
 		){
 
-			// don't need the above code bedaduse you catch robinhood if you get close to him
 			//generate new location if you hit him
 		//robin hoood got hit
 			this.x = Math.random() * 440 + 40; 
@@ -400,11 +399,11 @@ function Golem(name){
 	}
 	//changes the speed of the goblin and changes them to a coin if dead
 	this.changeSpeed = function() {
-		if (this.health == 300){
+		if (this.health == 75){
 			this.speed = .4; 
-		}else if(this.health == 100){
-			this.speed = .2;
 		}else if(this.health == 20){
+			this.speed = .2;
+		}else if(this.health == 5){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
@@ -577,8 +576,9 @@ function draw(){
 		clearInterval(counterInterval);
 	}
 
-	context.drawImage(golem0.image, golem0.x, golem0.y);
+	
 	context.drawImage(backgroundImage, 0, 0);
+	context.drawImage(golem0.image, golem0.x, golem0.y);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
 	//a for loop that draws and moves all the goblins in the arrray
