@@ -396,7 +396,7 @@ function Golem(name){
 	this.getHitByArrow = function() {
 		if (
 			Math.abs(robinHood.arrowLocation.x - this.x) < 30
-		&& Math.abs(robinHood.arrowLocation.y - this.y) < 50
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 70
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
@@ -406,7 +406,7 @@ function Golem(name){
 			this.changeSpeed();
 		}
 	}
-	//changes the speed of the goblin and changes them to a coin if dead
+	//changes the speed of the goblin and adds gold if dead
 	this.changeSpeed = function() {
 		if (this.health == 75){
 			this.speed = .4; 
@@ -459,6 +459,88 @@ function clearDisplay(){
 //check
 
 //figure out what you need to update constantly and then place it in the draw function
+
+
+// ----------------------------------------------------------
+// ----create Heros, Monsters and Allies below---------------
+// ----------------------------------------------------------
+
+//program counterintervals
+var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+var goblinInterval = setInterval(generateGoblinNumber, 5000);
+var thugInterval = setInterval(generateThugNumber, 7000);
+
+var gameStartTime = Date.now(); //find out when the user started the game
+var score = 0;
+
+function updateCounter(){
+	//will need to add this player functionality
+	score++; 
+	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
+	
+}
+
+//create robinhood - create an image object and send it through to the constructore
+
+var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
+
+
+// ----GOBLINS---------------
+var goblin0 = new Goblin("goblin0");
+var goblin1 = new Goblin("goblin1");
+
+
+
+var goblinNumber = 2;
+function generateGoblinNumber(){
+
+	//create a goblin with a number at the end - first one generated will be goblin2
+	var newGoblin = "goblin" + goblinNumber;
+	//add 1 to the goblin number so that the next goblin generated will be goblin 
+	goblinNumber++;
+	// send the newGoblin to the goblin GEnerator
+	generateGoblin(newGoblin);
+}
+
+function generateGoblin(newGoblin){
+	var newGoblin = new Goblin(newGoblin);
+	goblinArray.push(newGoblin);
+}
+
+// create a goblin array
+var goblinArray = [];
+goblinArray.push(goblin0,goblin1);
+
+// ----THUGS---------------
+var thugArray = []; 
+var thug0 = new Thug("thug0");
+thugArray.push(thug0);
+var firstThugGeneratedNumber = 1;
+
+function generateThugNumber(){
+	var newThug = "thug"+firstThugGeneratedNumber;
+	firstThugGeneratedNumber++;
+	generateThug(newThug);
+}
+
+function generateThug(newThug){
+	var newThug = new Thug(newThug);
+	thugArray.push(newThug);
+	
+}
+
+//create a golem
+var golem0 = new Golem("golem0");
+
+
+
+
+
+// ----------------------------------------------------------
+// ----UPDATE AND DRAW SECTIONS BELOW------------------------
+// ----------------------------------------------------------
+
+
 function update(){
 	robinHood.move(keysPressed);
 	robinHood.shoot(keysPressed);
@@ -501,81 +583,6 @@ function checkGameStatus(health){
 		document.getElementById("textDisplay").innerHTML = "GAME OVER";
 	}
 }
-
-//program counterintervals
-var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
-var goblinInterval = setInterval(generateGoblinNumber, 5000);
-var thugInterval = setInterval(generateThugNumber, 7000);
-
-var gameStartTime = Date.now(); //find out when the user started the game
-var score = 0;
-
-function updateCounter(){
-	//will need to add this player functionality
-	score++; 
-	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
-	
-}
-
-//create robinhood - create an image object and send it through to the constructore
-
-var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
-
-
-//create goblins
-var goblin0 = new Goblin("goblin0");
-var goblin1 = new Goblin("goblin1");
-
-//create a golem
-var golem0 = new Golem("golem0");
-
-var firstGoblinGeneratedNumber = 2;
-function generateGoblinNumber(){
-
-	var newGoblin = "goblin"+firstGoblinGeneratedNumber;
-	firstGoblinGeneratedNumber++;
-	generateGoblin(newGoblin);
-	// var "goblin"+firstGoblinGeneratedNumber = new Goblin("newGoblin");
-	// firstGoblinGeneratedNumber++;
-}
-
-function generateGoblin(newGoblin){
-	var newGoblin = new Goblin(newGoblin);
-	goblinArray.push(newGoblin);
-}
-
-// create a goblin array
-var goblinArray = [];
-goblinArray.push(goblin0,goblin1);
-
-//create some thugs
-var thugArray = []; 
-var thug0 = new Thug("thug0");
-thugArray.push(thug0);
-var firstThugGeneratedNumber = 1;
-
-function generateThugNumber(){
-	var newThug = "thug"+firstThugGeneratedNumber;
-	firstThugGeneratedNumber++;
-	generateThug(newThug);
-}
-
-function generateThug(newThug){
-	var newThug = new Thug(newThug);
-	thugArray.push(newThug);
-	
-}
-
-
-
-
-
-
-
-
-//can access his name with robinHood.name
-
-
 // need to draw the image constantly
 
 function draw(){
