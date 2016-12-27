@@ -57,7 +57,6 @@ function startGame(){
 	gameOn = true;
 	var currentHighScore = (localStorage.getItem("highScore"));
 	console.log(currentHighScore);
-	// document.getElementById("highScoreKeeper").innerHTML = "High Score: "+ highScore;
 	counterInterval = setInterval(updateCounter, 1000); //update the counter every second
 }
 
@@ -213,8 +212,8 @@ function Goblin(name){
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/royalty goblin.png"
 	this.speed = 1; 
-	this.x = 300;
-	this.y = 200;
+	this.x = Math.random() * 440 + 40; ;
+	this.y = Math.random() * 400 + 20;
 	this.destinationX = Math.random() * 440 + 40; 
 	this.destinationY = Math.random() * 400 + 20; 
 	this.move = function(){
@@ -299,8 +298,8 @@ function Thug(name){
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/thug.png";
 	this.speed = 1; 
-	this.x = 300;
-	this.y = 200;
+	this.x = this.x = Math.random() * 440 + 40; 
+	this.y = this.y = Math.random() * 400 + 20; 
 	this.move = function(){
 		if (Math.abs(this.x - robinHood.x) < 32) {
 			this.catchRobinHood();
@@ -387,7 +386,7 @@ function Thug(name){
 function Golem(name){
 
 	this.name = name; 
-	this.health = 150;
+	this.health = 90;
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/golem1.png";
 	this.speed = 1; 
@@ -444,7 +443,7 @@ function Golem(name){
 	}
 	//changes the speed of the goblin and adds gold if dead
 	this.changeSpeed = function() {
-		if (this.health == 75){
+		if (this.health == 50){
 			this.speed = .4; 
 		}else if(this.health == 20){
 			this.speed = .2;
@@ -650,6 +649,9 @@ function draw(){
 		update();
 	}else{
 		clearInterval(counterInterval);
+		clearInterval(goblinInterval);
+		clearInterval(thugInterval);
+		clearInterval(golemInterval);
 	}
 
 	
