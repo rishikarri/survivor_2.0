@@ -15,7 +15,51 @@ backgroundImage.src = "Images/background2.jpeg";
 // ----------------------GLOBALS-----------------------------
 // ----------------------------------------------------------
 
+// ----------------------------------------------------------
+// ----------------Administrative Section, Instructions------
+// ---------------------enter name etc.----------------------
 
+
+
+
+
+var gameStartTime = Date.now(); //find out when the user started the game
+var score = 0;
+var counterInterval;
+
+function updateCounter(){
+	//will need to add this player functionality
+	score++; 
+
+	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
+	
+}
+
+
+var highScore = localStorage.getItem("highScore");
+document.getElementById("highScoreKeeper").innerHTML = "High Score: "+ highScore;
+//get the highsore
+function checkIfHighScore(){
+	// convert highScore into a number because it is currently a string
+	highScore = Number(highScore);
+	if (score > highScore){
+		highScore = score; 
+		document.getElementById("highScoreKeeper").innerHTML = "High Score: "+ highScore;
+		localStorage.setItem("highScore", highScore);
+	}else{
+		document.getElementById("highScoreKeeper").innerHTML = "High Score: "+ highScore;
+	}
+}
+
+
+var gameOn = false;
+function startGame(){
+	gameOn = true;
+	var currentHighScore = (localStorage.getItem("highScore"));
+	console.log(currentHighScore);
+	// document.getElementById("highScoreKeeper").innerHTML = "High Score: "+ highScore;
+	counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+}
 
 
 // CREATE EVENT LISTENERS
@@ -457,20 +501,7 @@ function clearDisplay(){
 // ----create Heros, Monsters and Allies below---------------
 // ----------------------------------------------------------
 
-//program counterintervals
-var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
 
-
-
-var gameStartTime = Date.now(); //find out when the user started the game
-var score = 0;
-
-function updateCounter(){
-	//will need to add this player functionality
-	score++; 
-	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
-	
-}
 
 //create robinhood - create an image object and send it through to the constructore
 
@@ -527,14 +558,14 @@ function generateThug(newThug){
 }
 // ----------------------GOLEMS-----------------------------
 
-var golemInterval = setInterval(generateGolemNumber, 28000);
+var golemInterval = setInterval(generateGolemNumber, 35000);
 
 //create a golem
-var golem0 = new Golem("golem0");
+// var golem0 = new Golem("golem0");
 //empty golemArray and then you push golem0 to the golem array  
 var golemArray = []; 
-golemArray.push(golem0);
-var golemNumber = 1; 
+// golemArray.push(golem0);
+var golemNumber = 0; 
 
 function generateGolemNumber(){
 	var newGolem = "golem" + golemNumber;
@@ -562,6 +593,7 @@ function update(){
 	robinHood.shoot(keysPressed);
 	robinHood.arrowFollow();
 	checkGameStatus(robinHood.health);
+	checkIfHighScore();
 
 	//create golem
 	// golem0.move();
@@ -603,7 +635,7 @@ function update(){
 
 }
 
-var gameOn = true;
+
 //end game if player has 0 or less health
 function checkGameStatus(health){
 	if(health <= 0){
@@ -635,7 +667,7 @@ function draw(){
 		}
 	}
 	// Draw the thug on the page
-	context.drawImage(thug0.image, thug0.x, thug0.y);
+	// context.drawImage(thug0.image, thug0.x, thug0.y);
 	
 	requestAnimationFrame(draw);
 
@@ -663,4 +695,6 @@ function draw(){
 
 	
 draw();	
+
+
 
