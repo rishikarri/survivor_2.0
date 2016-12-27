@@ -17,18 +17,18 @@ backgroundImage.src = "Images/background2.jpeg";
 
 // ----------------------------------------------------------
 // ----------------Administrative Section, Instructions------
-// ---------------------enter name etc.----------------------
+// ----------------------------------------------------------
 
 
 
 
 
-var gameStartTime = Date.now(); //find out when the user started the game
+
 var score = 0;
-var counterInterval;
+counterInterval = setInterval(updateCounter, 1000);
 
 function updateCounter(){
-	//will need to add this player functionality
+	
 	score++; 
 
 	document.getElementById("scoreKeeper").innerHTML = "Score: " + score;
@@ -52,14 +52,57 @@ function checkIfHighScore(){
 }
 
 
-var gameOn = false;
-function startGame(){
-	gameOn = true;
-	var currentHighScore = (localStorage.getItem("highScore"));
-	console.log(currentHighScore);
-	counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+var gameOn = true;
+
+monsterIntervalManager(false);
+
+function monsterIntervalManager(clearMe){
+	// clear Intervals if clearMe is true, otherwise don't
+	
+	if(clearMe){
+		clearInterval(goblinInterval);
+		clearInterval(thugInterval);
+		clearInterval(golemInterval);
+	}else{
+		console.log("hi");
+		goblinInterval = setInterval(generateGoblinNumber, 5000);
+		thugInterval = setInterval(generateThugNumber, 7000);
+		golemInterval = setInterval(generateGolemNumber, 35000);
+	}
 }
 
+function startGame(){
+	
+	//set hero's health to 20  when the game starts
+	// refresh teh page to start a new game
+	location.reload();	
+}
+
+
+
+function pauseGame(){
+	gameOn = false;
+	monsterIntervalManager(true);
+}
+
+function resumeGame(){
+	gameOn = true;
+	counterInterval = setInterval(updateCounter, 1000); //update the counter every second
+	monsterIntervalManager(false);
+	// var goblinInterval = setInterval(generateGoblinNumber, 5000);
+	// var golemInterval = setInterval(generateGolemNumber, 35000);
+	// var thugInterval = setInterval(generateThugNumber, 7000);
+}
+
+function openShop(){
+	// pause ggame so it's not running in the background
+	gameOn = false;
+
+}
+
+function clearMonsterIntervals(){
+
+}
 
 // CREATE EVENT LISTENERS
 
@@ -508,8 +551,14 @@ var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
 
 // ----------------------GOBLINS-----------------------------
+var goblinInterval, thugInterval, golemInterval;
 
-var goblinInterval = setInterval(generateGoblinNumber, 5000);
+
+
+// var goblinInterval = setInterval(generateGoblinNumber, 5000);
+
+	
+
 
 var goblin0 = new Goblin("goblin0");
 var goblin1 = new Goblin("goblin1");
@@ -537,7 +586,8 @@ var goblinArray = [];
 goblinArray.push(goblin0,goblin1);
 
 // ----------------------THUGS-----------------------------
-var thugInterval = setInterval(generateThugNumber, 7000);
+// var thugInterval = setInterval(generateThugNumber, 7000);
+
 
 var thugArray = []; 
 var thug0 = new Thug("thug0");
@@ -557,7 +607,7 @@ function generateThug(newThug){
 }
 // ----------------------GOLEMS-----------------------------
 
-var golemInterval = setInterval(generateGolemNumber, 35000);
+// var golemInterval = setInterval(generateGolemNumber, 35000);
 
 //create a golem
 // var golem0 = new Golem("golem0");
@@ -640,6 +690,7 @@ function checkGameStatus(health){
 	if(health <= 0){
 		gameOn = false;
 		document.getElementById("textDisplay").innerHTML = "GAME OVER";
+		monsterIntervalManager(true);
 	}
 }
 // need to draw the image constantly
@@ -649,9 +700,6 @@ function draw(){
 		update();
 	}else{
 		clearInterval(counterInterval);
-		clearInterval(goblinInterval);
-		clearInterval(thugInterval);
-		clearInterval(golemInterval);
 	}
 
 	
