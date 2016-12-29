@@ -63,8 +63,7 @@ function monsterIntervalManager(clearMe){
 		clearInterval(goblinInterval);
 		clearInterval(thugInterval);
 		clearInterval(golemInterval);
-	}else{
-		console.log("hi");
+	}else{		
 		goblinInterval = setInterval(generateGoblinNumber, 5000);
 		thugInterval = setInterval(generateThugNumber, 7000);
 		golemInterval = setInterval(generateGolemNumber, 35000);
@@ -97,6 +96,7 @@ function resumeGame(){
 function openShop(){
 	// pause ggame so it's not running in the background
 	gameOn = false;
+	monsterIntervalManager(false);
 
 }
 
@@ -517,6 +517,99 @@ function Golem(name){
 
 }
 
+// NINJA CONSTRUCTOR!!! 
+function Ninja(name){
+	this.name = name;
+	this.image = new Image(); 
+	this.image.src = "possible-enemies-allies/ninja2.png";
+	this.ninjaStarImage = new Image(); 
+	this.ninjaStarImage.src = "possible-enemies-allies/ninja-star.png"
+	this.ninjaStarLocation = {
+		x: 329, 
+		y: 229,
+		destinationX: 0,
+		destinationY: 0
+	}
+
+	this.speed = 1; 
+	this.x = 300; 
+	this.y = 200;
+	this.destinationX = Math.random() * 440 + 40;
+	this.destinationY = Math.random() * 400 + 20;
+	this.faceLeft = false;
+	this.throwing = false;
+
+	this.move = function(){
+		if (Math.abs(this.x - this.destinationX) < 32) {
+			this.destinationX = Math.random() * 440 + 40; 
+		}else if(this.x < this.destinationX){
+			this.x += 2.00 * this.speed;
+			this.image.src = "possible-enemies-allies/ninja2.png";
+			this.faceLeft = false;
+		}else{
+			this.x -= 2.00 * this.speed;
+			this.image.src = "possible-enemies-allies/ninja2-left.png";
+			this.faceLeft = true;
+		}
+		
+		if (Math.abs(this.y - this.destinationY) < 32) {
+			this.destinationY = Math.random() * 400 + 20; 
+		}else if(this.y > this.destinationY){
+			this.y -= 2.00 * this.speed;
+		}else{
+			this.y += 2.00 * this.speed;
+		}
+	}
+
+	//ninja star should follow the ninja as long as he is not shooting 
+	this.ninjaStarFollow = function(){		
+		if (!this.throwing){
+			if(this.faceLeft){
+				this.ninjaStarLocation.x = this.x + 29;
+				this.ninjaStarLocation.y = this.y + 29;
+				
+			}else if(!this.faceLeft){
+				this.ninjaStarLocation.x = this.x + 18;
+				this.ninjaStarLocation.y = this.y + 29;
+				
+			}
+		}
+	
+	}
+
+	this.ninjaStarThrow = function(){
+		// when this is called throw star
+		this.throwing = true;
+		// if he is facing left throw left
+		if (this.x > 300){
+			// throw left and turn left
+			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 400; 
+			this.image.src = "possible-enemies-allies/ninja2-left.png";
+		}else if(this.x < 301){
+			// throw right and turn right
+			this.image.src = "possible-enemies-allies/ninja2.png";
+			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 400;
+		}
+
+		//make star move
+
+		// if the arrow is within 10 pixels of its destination stop it
+		if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 10){
+			this.stopThrowing();
+		}else{
+			//if the arrow is not within 10 pixels of its destination, keep it going
+			if(this.arrowLocation.x < this.arrowLocation.destinationX && shooting == true){
+				this.arrowLocation.x += 6;				
+			}else if(this.arrowLocation.x > this.arrowLocation.destinationX && shooting == true){
+				this.arrowLocation.x -= 6;
+			}								
+		}
+	}
+	this.stopThrowing = function() {
+		
+	}
+}
+
 function clearDisplay(){
 	document.getElementById("textDisplay").innerHTML = "&nbsp";
 	// var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
@@ -547,7 +640,7 @@ function clearDisplay(){
 
 //create robinhood - create an image object and send it through to the constructore
 
-var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
+
 
 
 // ----------------------GOBLINS-----------------------------
@@ -629,6 +722,78 @@ function generateGolem(newGolem){
 	
 }
 
+// HERO section
+var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
+
+//let's create a NINJA
+
+var ninja0 = new Ninja("ninja0");
+// ----------------------------------------------------------
+// ----------------Shop Section here-------------------------
+// ----------------------------------------------------------
+
+// get modal
+var modalShop = document.getElementById('modal-shop');
+
+// Get the <span> element that closes the modal
+var leaveShop = document.getElementsByClassName("close-shop")[0];
+
+// When the user clicks on the button, open the modal 
+function openShop() {
+    // when the user opens the shop, change the display to block
+    modalShop.style.display = "block";
+    // pause the game
+    pauseGame();	
+}
+
+// When the user clicks on <span> (x), close the modal
+leaveShop.onclick = function() {
+    modalShop.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modalShop) {
+        modalShop.style.display = "none";
+    }
+}
+
+//after the user opens up shop - below is the code for using / purchasing items after 
+
+// create functions that enable and disable purchasing buttons depending on robinhood's gold
+function disableButton(buttonString){
+	var button = document.getElementById(buttonString);
+	button.disabled = true;
+}
+
+function enableButton(buttonString){
+	var button = document.getElementById(buttonString);
+	button.disabled = false;
+}
+
+// check to see what robinHood can purchase
+function checkPurchasingAbility(){
+	if (robinHood.gold < 10){
+	disableButton("health-potion-button");	
+	}else{
+	enableButton("health-potion-button")
+	}
+}
+
+
+
+function drinkHealthPotion(){
+	// when user buys and drinks potion, increase health by 3, decrease gold by 50
+	robinHood.health += 3; 
+	robinHood.gold -= 50; 
+	document.getElementById("health").innerHTML = robinHood.health; 	
+	document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+	checkPurchasingAbility();	
+}
+
+
+	
+
 
 
 
@@ -644,11 +809,9 @@ function update(){
 	checkGameStatus(robinHood.health);
 	checkIfHighScore();
 
-	//create golem
-	// golem0.move();
-	// golem0.catchRobinHood();
-	// golem0.getHitByArrow();
 
+	ninja0.move(); 
+	ninja0.ninjaStarFollow();
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
 		if(goblinArray[i] === "do nothing"){
@@ -707,6 +870,8 @@ function draw(){
 	// context.drawImage(golem0.image, golem0.x, golem0.y);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
+	context.drawImage(ninja0.image, ninja0.x, ninja0.y);
+	context.drawImage(ninja0.ninjaStarImage, ninja0.ninjaStarLocation.x, ninja0.ninjaStarLocation.y);
 	//a for loop that draws and moves all the goblins in the arrray
 	for (var i = 0; i < goblinArray.length; i++) {
 

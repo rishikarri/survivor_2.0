@@ -29,7 +29,7 @@
 				<button onclick="startGame()">Start a New Game</button>
 				<button onclick="pauseGame()">Pause Game</button>
 				<button onclick="resumeGame()">Resume Game</button>
-				<button onclick="openShop()">Enter Shop</button>
+				<button onclick="openShop(); checkPurchasingAbility();">Enter Shop</button>
 				<!-- Make a form here -->
 				<!-- <form id="enter-name-form" onsubmit="recordName();">
 
@@ -59,7 +59,23 @@
 		<!-- holds the canvas  -->
 		</div>
 
-		
+		<div id="modal-shop">
+
+		  <!-- Modal content -->
+		  <div class="modal-shop-content">
+		    <span class="close-shop">&times;</span>
+		    <p>Welcome to the Shop! Here we have help and supplies that should aid in your quest to protect the land!</p>
+		    
+
+		    <button id="health-potion-button" onclick="drinkHealthPotion()">Drink Health Potion</button>
+		    <button id="fire-arrows-button" onclick="giveHeroFireArrows()">Buy Fire Arrows</button>
+		    <button id="speed-potion-button" onclick="drinkSpeedPotion()">Buy Speed Potion</button>
+		    <button id="ninja-button" onclick="hireNinja()">Hire Ninja</button>
+
+		  </div>
+
+		</div>
+
 	</div>
 
 
