@@ -9,6 +9,7 @@ html{
 button {
 	background-color: #828489;
 	border-radius: 6%;
+	color: ghostwhite;
 }
 
 
@@ -31,16 +32,26 @@ button {
 	display: inline-block;
 }
 
+#gold-collection-section{
+	display: inline-block;
+}
+#gold-collection-section img{
+	margin-bottom: -26px;	
+
+}
 
 
 #gold-collected{
-	background-image: url("Images/treasure-chest-2.png");
-	background-size: 100px 68px;
-	height: 68px;
+	background-image: url("Images/gold-holder.png");
+	height: 70px;
 	width: 100px;
-	line-height: 68px;
-
-	color: gold;
+	/* background-size: 100px 68px; */
+	display: inline-block;
+	/* margin-left: -76px; */
+	color: #0A0908;
+	font-weight: 700;
+	line-height: 70px;
+	font-size: 20px;
 
 }
 
@@ -48,7 +59,6 @@ button {
 	color: white;
 	font-weight: 700;
 	background-image: url("Images/heart38.png");
-	background-size: 71px 68px;
 	height: 68px;
 	width: 71px;	
 	line-height: 68px;
@@ -84,12 +94,13 @@ button {
 
 /* Modal Content/Box */
 .modal-shop-content {
-    background-color: #fefefe;
+    background-color: #5B4B49	;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     height: 60%; /* Could be more or less, depending on screen size */
+
 }
 
 /* The Close Button */
@@ -110,16 +121,25 @@ button {
 /* shop button styling below */
 #shop-buttons div{
 	float: left;
-	margin-left: 25px;
 	width: 20%;
 	text-align: center;
 
 }
 
+#shop-buttons div button{
+	margin-bottom: 30px;
+}
+
+
+.gold-text{
+	color: gold;
+}
 
 
 /* target all images and put them directly underneath the buttons */
 #shop-buttons img{
+	margin-top: 20px;
 	display: block;
 	margin: auto;
 }
+

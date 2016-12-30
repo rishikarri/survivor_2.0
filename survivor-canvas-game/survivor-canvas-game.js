@@ -122,6 +122,7 @@ addEventListener("keydown", function(event){
 
 //create a Hero constructor - takes in a name and an image to create a new one, for now we will only create one
 var shooting = false;
+var arrowDamage = 1;
 function Hero(name, image, speed){
 	this.name = name; 
 	this.health = 20;
@@ -162,7 +163,13 @@ function Hero(name, image, speed){
 				this.x -= 7 * this.speed;
 				// Make archer look left if he is moving left - do the same with arrow
 				this.image.src = "possible-enemies-allies/archer3-left.png";
-				this.arrowImage.src = "Images/arrow-left.png";
+				//if the user upgraded arrows, show fire arrows, otherwise show regular arrows
+				if(arrowDamage ==2) {
+					this.arrowImage.src="Images/flaming-arrow2 left.png"
+				}else{
+					this.arrowImage.src = "Images/arrow-left.png";	
+				}
+				
 				// this.arrowLocation.x = this.x - 4; 
 				// this.arrowLocation.y = this.y + 18;
 				this.faceLeft = true;
@@ -177,8 +184,13 @@ function Hero(name, image, speed){
 		if (39 in keysPressed){
 			if (this.x <= 520){
 				this.x += 7 * this.speed;
-				this.image.src = "possible-enemies-allies/archer3.png";
-				this.arrowImage.src = "Images/arrow-right.png";
+				this.image.src = "possible-enemies-allies/archer3.png";				
+				if(arrowDamage === 2){
+					this.arrowImage.src = "Images/flaming-arrow2.png";
+				}else{
+					this.arrowImage.src = "Images/arrow-right.png";	
+				}
+				
 				// this.arrowLocation.x = this.x + 22;
 				// this.arrowLocation.y = this.y + 18;
 				this.faceLeft = false;
@@ -204,7 +216,11 @@ function Hero(name, image, speed){
 			// change image source and make sure the character is facing right
 			this.image.src = "possible-enemies-allies/archer3.png";
 			this.faceLeft = false;
-			this.arrowImage.src = "Images/arrow-right.png";
+			if(arrowDamage === 2){
+					this.arrowImage.src = "Images/flaming-arrow2.png";
+			}else{
+					this.arrowImage.src = "Images/arrow-right.png";	
+			}
 
 		}else if(65 in keysPressed){
 			shooting = true;
@@ -214,7 +230,12 @@ function Hero(name, image, speed){
 			// change the image source and make sure the character is shooting left
 			this.image.src = "possible-enemies-allies/archer3-left.png";
 			this.faceLeft = true;
-			this.arrowImage.src = "Images/arrow-left.png";
+
+			if(arrowDamage ==2) {
+					this.arrowImage.src="Images/flaming-arrow2 left.png"
+			}else{
+					this.arrowImage.src = "Images/arrow-left.png";	
+			}
 
 		}else {
 			shooting = false;
@@ -299,7 +320,7 @@ function Goblin(name){
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= 1;
+			this.health -= arrowDamage;
 			shooting = false;
 			robinHood.stopShooting();
 			this.changeSpeed();
@@ -321,14 +342,14 @@ function Goblin(name){
 			// change image source to nothing and increase gold
 			this.image.src = "";
 			robinHood.gold += 5;
-			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;	
+			document.getElementById("gold-collected").innerHTML = robinHood.gold;	
 
 			// CHANGE TEXT DISPLAY TO GOLD BEFOE DISPLAYING
 			document.getElementById("textDisplay").style.color = "goldenRod"; 
 			document.getElementById("textDisplay").innerHTML = "You collected " + 5 + " gold!";
 
-			// clear the text display after 2 seconds
-			displayGold = setInterval(clearDisplay, 3000); //update the counter every second
+			// clear the text display after 3 seconds
+			displayGold = setInterval(clearDisplay, 3000); 
 		}
 	}
 
@@ -388,7 +409,7 @@ function Thug(name){
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= 1;
+			this.health -= arrowDamage;
 			shooting = false;
 			robinHood.stopShooting();
 			this.changeSpeed();
@@ -412,14 +433,14 @@ function Thug(name){
 			// change image source to nothing and increase gold
 			this.image.src = "";
 			robinHood.gold += 7;
-			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+			document.getElementById("gold-collected").innerHTML = robinHood.gold;
 
 			//display the amount of gold Collected for 2 seconds
 			document.getElementById("textDisplay").style.color = "goldenRod"; 
 			document.getElementById("textDisplay").innerHTML = "You collected " + 7 + " gold!";
 
 			// clear the text display after 2 seconds
-			displayGold = setInterval(clearDisplay, 2000); //update the counter every second
+			setTimeout(clearDisplay, 3000); //update the counter every second
 
 		}	
 	}
@@ -429,7 +450,7 @@ function Thug(name){
 function Golem(name){
 
 	this.name = name; 
-	this.health = 90;
+	this.health = 80;
 	this.image = new Image();
 	this.image.src = "possible-enemies-allies/golem1.png";
 	this.speed = 1; 
@@ -478,7 +499,7 @@ function Golem(name){
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= 1;
+			this.health -= arrowDamage;
 			shooting = false;
 			robinHood.stopShooting();
 			this.changeSpeed();
@@ -494,8 +515,8 @@ function Golem(name){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
-			var golemNumber = this.name.slice(4);
-			console.log(golemNumber);
+			var golemNumber = this.name.slice(5);
+			
 
 			//change property in thug array to do nothing
 			golemArray[golemNumber] = "do nothing";
@@ -503,14 +524,14 @@ function Golem(name){
 			// change image source to nothing and increase gold
 			this.image.src = "";
 			robinHood.gold += 40;
-			document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+			document.getElementById("gold-collected").innerHTML = robinHood.gold;
 
 			//display the amount of gold Collected for 2 seconds
 			document.getElementById("textDisplay").style.color = "goldenRod"; 
 			document.getElementById("textDisplay").innerHTML = "You collected " + 40 + " gold!";
 
-			// clear the text display after 2 seconds
-			displayGold = setInterval(clearDisplay, 3000); //update the counter every second
+			// clear the text display after 3 seconds
+			setTimeout(clearDisplay, 3000); //update the counter every second
 
 		}	
 	}
@@ -619,7 +640,8 @@ function Ninja(name){
 function clearDisplay(){
 	document.getElementById("textDisplay").innerHTML = "&nbsp";
 	// var counterInterval = setInterval(updateCounter, 1000); //update the counter every second
-	clearInterval(displayGold);
+	
+	
 	//change it back to red for game over after display
 	document.getElementById("textDisplay").style.color = "red"; 
 
@@ -793,8 +815,42 @@ function drinkHealthPotion(){
 	robinHood.health += 3; 
 	robinHood.gold -= 50; 
 	document.getElementById("health").innerHTML = robinHood.health; 	
-	document.getElementById("gold-collected").innerHTML = "Gold: " + robinHood.gold;
+	document.getElementById("gold-collected").innerHTML = robinHood.gold;
 	checkPurchasingAbility();	
+}
+
+function drinkSpeedPotion(){
+	robinHood.speed = 1.9;
+	robinHood.gold -= 500;
+	document.getElementById("gold-collected").innerHTML = robinHood.gold;
+
+	document.getElementById("textDisplay").innerHTML = "SPEED BOOST!";
+	document.getElementById("textDisplay").style.color = "green"; 
+	setTimeout(clearDisplay, 8000);
+
+
+}
+
+function giveHeroFireArrows(){
+	// increase arrow damage to 2
+	arrowDamage = 2; 
+	//change arrow image source to fire arrows - logic above is already chagned
+	if (robinHood.faceLeft === true){
+		robinHood.arrowImage.src = "Images/flaming-arrow2 left.png"
+	}else{
+		robinHood.arrowImage.src = "Images/flaming-arrow2.png"
+	}
+
+	//tell teh user what just happened
+
+	robinHood.gold -= 300;
+	document.getElementById("gold-collected").innerHTML = robinHood.gold;
+
+	document.getElementById("textDisplay").innerHTML = "FLAMING ARROWS IGNITED!";
+	document.getElementById("textDisplay").style.color = "firebrick"; 
+	setTimeout(clearDisplay, 8000);
+	
+
 }
 
 
