@@ -326,6 +326,22 @@ function Goblin(name){
 			this.changeSpeed();
 		}
 	}
+
+	this.getHitByNinjaStar = function(){
+		if (
+			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 15
+		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 28 
+		&& ninja0.throwing === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= ninjaStarDamage;
+			ninja0.throwing = false;
+			ninja0.stopThrowing();
+			this.changeSpeed();
+		}
+	}
+
+	
 	//changes the speed of the goblin and changes them to a coin if dead
 	this.changeSpeed = function() {
 		if (this.health == 2){
@@ -540,10 +556,9 @@ function Golem(name){
 
 
 // NINJA CONSTRUCTOR!!! 
-// setInterval(function(){
-// 	ninja0.ninjaStarThrow();
-// 	throwing = true; 
-// },5000)
+//RK to come back and make this a prototype
+var ninjaStarDamage = 40; 
+
 function Ninja(name){
 	this.name = name;
 	this.image = new Image(); 
@@ -564,6 +579,9 @@ function Ninja(name){
 	this.destinationY = Math.random() * 400 + 20;
 	this.faceLeft = false;
 	this.throwing = false;
+	//create a variable that tracks when the ninja threw the star
+	this.throwStar = false
+
 
 	this.move = function(){
 
@@ -582,11 +600,14 @@ function Ninja(name){
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
-			this.destinationY = Math.random() * 400 + 20; 		
+			this.destinationY = Math.random() * 400 + 20; 
+			//throw the star if he reaches the y destination
+			this.ninjaStarThrow();	
 		}else if(this.y > this.destinationY && !this.throwing){
 			this.y -= 2.00 * this.speed;
 		}else if(this.y < this.destinationY && !this.throwing){
 			this.y += 2.00 * this.speed;
+
 		}
 	}
 
@@ -606,41 +627,55 @@ function Ninja(name){
 	
 	}
 
+	// sets a new destination for the ninja star and stop the ninja from moving by setting throwing to true
 	this.ninjaStarThrow = function(){
 		// when this is called throw star
 		this.throwing = true;
+		
 		// if he is on the right side of the map throw left
-		if (this.x > 300){
+		if (this.x > 300){			
 			// throw left and turn left
 			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 300; 
 			this.image.src = "possible-enemies-allies/ninja2-left.png";
-		}else if(this.x < 301){
+			// set it to false so that the star can actually come back to the ninja
+			// this.throwStar = false;
+		}else if(this.x < 301){			
 			// throw right and turn right
 			this.image.src = "possible-enemies-allies/ninja2.png";
 			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 300;
+			// this.throwStar = false;
 		}
+	}
 
-		//make star move
+		
 
-		// if the ninjaStar is within 10 pixels of its destination stop throwing
+	//make star move or stop 
+
+	this.moveNinjaStar = function(){
 		if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 30){
 			this.stopThrowing();
 		}else{
 		// 	//if the ninjaStar is not within 10 pixels of its destination, keep it going
 			if(this.ninjaStarLocation.x < this.ninjaStarLocation.destinationX && this.throwing == true){
 				
-				this.ninjaStarLocation.x += 2;
-			
+				this.ninjaStarLocation.x += 3;
+
 			}else if(this.ninjaStarLocation.x > this.ninjaStarLocation.destinationX && this.throwing == true){
-				this.ninjaStarLocation -= 2; 
-					
+				this.ninjaStarLocation.x -= 3; 								
 			}								
 		}
+
 	}
+
+
+		// if the ninjaStar is within 10 pixels of its destination stop throwing
+		
+	
 	this.stopThrowing = function() {
 		console.log("hi");
 		this.throwing = false;
 		this.ninjaStarFollow();
+		// this.throwStar = false;
 	}
 }
 
@@ -880,8 +915,8 @@ function update(){
 	checkIfHighScore();
 
 
-	ninja0.move(); 
-	// ninja0.ninjaStarThrow();
+	ninja0.move(); 	
+	ninja0.moveNinjaStar();		
 	ninja0.ninjaStarFollow();
 	
 	// a for loop that goes through all necessary updates for all goblins
@@ -893,6 +928,7 @@ function update(){
 			//need to add catch robinhood function for goblins because they move randomly
 			goblinArray[i].catchRobinHood();
 			goblinArray[i].getHitByArrow();
+			goblinArray[i].getHitByNinjaStar();
 		}
 		
 	}
@@ -923,9 +959,13 @@ function update(){
 //end game if player has 0 or less health
 function checkGameStatus(health){
 	if(health <= 0){
+		//you lost
 		gameOn = false;
 		document.getElementById("textDisplay").innerHTML = "GAME OVER";
 		monsterIntervalManager(true);
+		disableButton("pause-button");
+		disableButton("resume-button");
+		disableButton("open-shop-button");
 	}
 }
 // need to draw the image constantly
