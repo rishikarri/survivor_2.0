@@ -538,7 +538,12 @@ function Golem(name){
 
 }
 
+
 // NINJA CONSTRUCTOR!!! 
+// setInterval(function(){
+// 	ninja0.ninjaStarThrow();
+// 	throwing = true; 
+// },5000)
 function Ninja(name){
 	this.name = name;
 	this.image = new Image(); 
@@ -561,29 +566,31 @@ function Ninja(name){
 	this.throwing = false;
 
 	this.move = function(){
+
+		// if he hits his destination, generate a new one
+		// if he is throwing, stop and throw until throw is complete
 		if (Math.abs(this.x - this.destinationX) < 32) {
 			this.destinationX = Math.random() * 440 + 40; 
-		}else if(this.x < this.destinationX){
+		}else if(this.x < this.destinationX && !this.throwing){
 			this.x += 2.00 * this.speed;
 			this.image.src = "possible-enemies-allies/ninja2.png";
 			this.faceLeft = false;
-		}else{
+		}else if(this.x > this.destinationX && !this.throwing){
 			this.x -= 2.00 * this.speed;
 			this.image.src = "possible-enemies-allies/ninja2-left.png";
 			this.faceLeft = true;
 		}
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
-			this.destinationY = Math.random() * 400 + 20; 
-			this.ninjaStarThrow();
-		}else if(this.y > this.destinationY){
+			this.destinationY = Math.random() * 400 + 20; 		
+		}else if(this.y > this.destinationY && !this.throwing){
 			this.y -= 2.00 * this.speed;
-		}else{
+		}else if(this.y < this.destinationY && !this.throwing){
 			this.y += 2.00 * this.speed;
 		}
 	}
 
-	//ninja star should follow the ninja as long as he is not shooting 
+	//ninja star should follow the ninja as long as he is not throwing it 
 	this.ninjaStarFollow = function(){		
 		if (!this.throwing){
 			if(this.faceLeft){
@@ -602,40 +609,41 @@ function Ninja(name){
 	this.ninjaStarThrow = function(){
 		// when this is called throw star
 		this.throwing = true;
-		// if he is facing left throw left
+		// if he is on the right side of the map throw left
 		if (this.x > 300){
 			// throw left and turn left
-			// this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 400; 
+			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 300; 
 			this.image.src = "possible-enemies-allies/ninja2-left.png";
 		}else if(this.x < 301){
 			// throw right and turn right
 			this.image.src = "possible-enemies-allies/ninja2.png";
-			// this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 400;
+			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 300;
 		}
 
 		//make star move
 
-		// if the ninjaStar is within 10 pixels of its destination stop it
-		// if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 10){
-		// 	this.stopThrowing();
-		// }else{
+		// if the ninjaStar is within 10 pixels of its destination stop throwing
+		if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 30){
+			this.stopThrowing();
+		}else{
 		// 	//if the ninjaStar is not within 10 pixels of its destination, keep it going
-		// 	if(this.ninjaStarLocation.x < this.ninjaStarLocation.destinationX && this.throwing == true){
+			if(this.ninjaStarLocation.x < this.ninjaStarLocation.destinationX && this.throwing == true){
 				
-		// 		setInterval(this.ninjaStarLocation.x += 10, 300);
-				
+				this.ninjaStarLocation.x += 2;
 			
-
-		// 	}else if(this.ninjaStarLocation.x > this.ninjaStarLocation.destinationX && this.throwing == true){
+			}else if(this.ninjaStarLocation.x > this.ninjaStarLocation.destinationX && this.throwing == true){
+				this.ninjaStarLocation -= 2; 
 					
-		// 	}								
-		// }
+			}								
+		}
 	}
 	this.stopThrowing = function() {
+		console.log("hi");
 		this.throwing = false;
 		this.ninjaStarFollow();
 	}
 }
+
 
 function clearDisplay(){
 	document.getElementById("textDisplay").innerHTML = "&nbsp";
@@ -873,7 +881,9 @@ function update(){
 
 
 	ninja0.move(); 
+	// ninja0.ninjaStarThrow();
 	ninja0.ninjaStarFollow();
+	
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
 		if(goblinArray[i] === "do nothing"){
