@@ -236,9 +236,9 @@ function Hero(name, image, speed){
 	}
 	//when this is called, stop shooting and return the arrow to robinhood
 	this.stopShooting = function(){
+		// stop robinhood from shooting and return the arrow to teh character
 		shooting = false;
-		this.arrowLocation.x = this.x + 20;
-		this.arrowLocation.y = this.y + 20; 
+		this.arrowFollow();		
 	}
 	
 }	
@@ -554,6 +554,7 @@ function Ninja(name){
 		
 		if (Math.abs(this.y - this.destinationY) < 32) {
 			this.destinationY = Math.random() * 400 + 20; 
+			this.ninjaStarThrow();
 		}else if(this.y > this.destinationY){
 			this.y -= 2.00 * this.speed;
 		}else{
@@ -583,30 +584,35 @@ function Ninja(name){
 		// if he is facing left throw left
 		if (this.x > 300){
 			// throw left and turn left
-			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 400; 
+			// this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x - 400; 
 			this.image.src = "possible-enemies-allies/ninja2-left.png";
 		}else if(this.x < 301){
 			// throw right and turn right
 			this.image.src = "possible-enemies-allies/ninja2.png";
-			this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 400;
+			// this.ninjaStarLocation.destinationX = this.ninjaStarLocation.x + 400;
 		}
 
 		//make star move
 
-		// if the arrow is within 10 pixels of its destination stop it
-		if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 10){
-			this.stopThrowing();
-		}else{
-			//if the arrow is not within 10 pixels of its destination, keep it going
-			if(this.arrowLocation.x < this.arrowLocation.destinationX && shooting == true){
-				this.arrowLocation.x += 6;				
-			}else if(this.arrowLocation.x > this.arrowLocation.destinationX && shooting == true){
-				this.arrowLocation.x -= 6;
-			}								
-		}
+		// if the ninjaStar is within 10 pixels of its destination stop it
+		// if(Math.abs(this.ninjaStarLocation.x - this.ninjaStarLocation.destinationX) < 10){
+		// 	this.stopThrowing();
+		// }else{
+		// 	//if the ninjaStar is not within 10 pixels of its destination, keep it going
+		// 	if(this.ninjaStarLocation.x < this.ninjaStarLocation.destinationX && this.throwing == true){
+				
+		// 		setInterval(this.ninjaStarLocation.x += 10, 300);
+				
+			
+
+		// 	}else if(this.ninjaStarLocation.x > this.ninjaStarLocation.destinationX && this.throwing == true){
+					
+		// 	}								
+		// }
 	}
 	this.stopThrowing = function() {
-		
+		this.throwing = false;
+		this.ninjaStarFollow();
 	}
 }
 

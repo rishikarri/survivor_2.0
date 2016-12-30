@@ -3,11 +3,11 @@ img{
 }
 
 html{
-	background-color: #828489;
+	background-color: #191308;
 }
 
 button {
-	background-color: #4D7EA8;
+	background-color: #828489;
 	border-radius: 6%;
 }
 
@@ -105,4 +105,21 @@ button {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* shop button styling below */
+#shop-buttons div{
+	float: left;
+	margin-left: 25px;
+	width: 20%;
+	text-align: center;
+
+}
+
+
+
+/* target all images and put them directly underneath the buttons */
+#shop-buttons img{
+	display: block;
+	margin: auto;
 }
