@@ -311,8 +311,8 @@ function Goblin(name){
 	this.catchRobinHood = function() {
 		// if this goblin is within 32 of robinhood, robinhood gets hurt unless goblin is a coin
 		if(
-			Math.abs((this.x - robinHood.x)) < 32
-			&& Math.abs(this.y - robinHood.y) < 32
+			Math.abs((this.x - robinHood.x)) < 24
+			&& Math.abs(this.y - robinHood.y) < 24
 		){
 		//robin hoood got hit
 			this.x = Math.random() * 440 + 40; 
@@ -388,7 +388,7 @@ function Thug(name){
 	this.x = this.x = Math.random() * 440 + 40; 
 	this.y = this.y = Math.random() * 400 + 20; 
 	this.move = function(){
-		if (Math.abs(this.x - robinHood.x) < 32){
+		if (Math.abs(this.x - robinHood.x) < 18){
 			this.catchRobinHood();
 		}else if(this.x <= robinHood.x){
 			this.x += 2 * this.speed;
@@ -398,7 +398,7 @@ function Thug(name){
 			this.image.src = "possible-enemies-allies/thug-left.png";
 		}
 		
-		if (Math.abs(this.y - robinHood.y) < 32) {
+		if (Math.abs(this.y - robinHood.y) < 24) {
 			this.catchRobinHood();
 		}else if(this.y > robinHood.y){
 			this.y -= 2 * this.speed;	
@@ -412,8 +412,8 @@ function Thug(name){
 	this.catchRobinHood = function() {
 		// if this goblin is within 32 of robinhood, robinhood gets hurt unless goblin is a coin
 		if(
-			Math.abs((this.x - robinHood.x)) < 32
-			&& Math.abs(this.y - robinHood.y) < 32
+			Math.abs((this.x - robinHood.x)) < 18
+			&& Math.abs(this.y - robinHood.y) < 24
 		){
 
 			// don't need the above code bedaduse you catch robinhood if you get close to him
