@@ -334,10 +334,7 @@ function Goblin(name){
 		&& ninja0.throwing === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= ninjaStarDamage;
-			ninja0.throwing = false;
-			ninja0.stopThrowing();
-			this.changeSpeed();
+			return true; 
 		}
 	}
 
@@ -352,7 +349,7 @@ function Goblin(name){
 			var goblinNumber = this.name.slice(6);		
 
 			//change property in goblin array to do nothing
-			goblinArray[goblinNumber] = "do nothing";
+			// goblinArray[goblinNumber] = "do nothing";
 
 			// change image source to nothing and increase gold
 			this.image.src = "";
@@ -514,13 +511,12 @@ function Golem(name){
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= arrowDamage;
-			shooting = false;
-			robinHood.stopShooting();
-			this.changeSpeed();
+			return true; 			
 		}
 	}
 	//changes the speed of the goblin and adds gold if dead
+
+
 	this.changeSpeed = function() {
 		if (this.health == 50){
 			this.speed = .4; 
@@ -695,11 +691,7 @@ function clearDisplay(){
 
 
 
-// Update function
 
-//check
-
-//figure out what you need to update constantly and then place it in the draw function
 
 
 // ----------------------------------------------------------
@@ -920,14 +912,32 @@ function update(){
 	
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
-		if(goblinArray[i] === "do nothing"){
-		
+		if(goblinArray[i].health <= 0){
+			// if the goblin's health is less than 0, there is no need to check to see if it got hit by anythig
 		}else{
-			goblinArray[i].move();
+
+			// if the goblin gets hit by the arrow, execute the below code
+			if(goblinArray[i].getHitByArrow() === true){
+				goblinArray[i].health -= arrowDamage;
+				shooting = false;
+				robinHood.stopShooting();
+				goblinArray[i].changeSpeed();
+			}else if(goblinArray[i].getHitByNinjaStar() === true){
+				goblinArray[i].health -= ninjaStarDamage;
+				ninja0.throwing = false;
+				ninja0.stopThrowing();
+				goblinArray[i].changeSpeed();
+
+			}else{
+				goblinArray[i].move();	
+				goblinArray[i].catchRobinHood();
+			}
+
+			
 			//need to add catch robinhood function for goblins because they move randomly
-			goblinArray[i].catchRobinHood();
-			goblinArray[i].getHitByNinjaStar();
-			goblinArray[i].getHitByArrow();
+			
+			// goblinArray[i].getHitByNinjaStar();
+			// goblinArray[i].getHitByArrow();
 			
 		}
 		
@@ -987,8 +997,8 @@ function draw(){
 	//a for loop that draws and moves all the goblins in the arrray
 	for (var i = 0; i < goblinArray.length; i++) {
 
-		if (goblinArray[i] === "do nothing") {
-
+		if (goblinArray[i].health <= 0) {
+			// don't draw the goblin if his health is less than 0 
 		}else{
 			context.drawImage(goblinArray[i].image, goblinArray[i].x, goblinArray[i].y);
 		}
