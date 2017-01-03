@@ -349,10 +349,9 @@ function Goblin(name){
 		}else if(this.health == 1){
 			this.speed = .2;
 		}else if (this.health <= 0){
-			this.image.src = "Images/gold-coin.png";
 			var goblinNumber = this.name.slice(6);		
 
-			//change property in thug array to do nothing
+			//change property in goblin array to do nothing
 			goblinArray[goblinNumber] = "do nothing";
 
 			// change image source to nothing and increase gold
@@ -365,7 +364,7 @@ function Goblin(name){
 			document.getElementById("textDisplay").innerHTML = "You collected " + 5 + " gold!";
 
 			// clear the text display after 3 seconds
-			displayGold = setInterval(clearDisplay, 3000); 
+			setTimeout(clearDisplay, 3000);
 		}
 	}
 
@@ -927,8 +926,9 @@ function update(){
 			goblinArray[i].move();
 			//need to add catch robinhood function for goblins because they move randomly
 			goblinArray[i].catchRobinHood();
-			goblinArray[i].getHitByArrow();
 			goblinArray[i].getHitByNinjaStar();
+			goblinArray[i].getHitByArrow();
+			
 		}
 		
 	}
