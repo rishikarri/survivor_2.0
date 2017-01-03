@@ -205,9 +205,12 @@ function Hero(name, image, speed){
 	}
 
 	this.shoot = function(keysPressed){
+		if(65 in keysPressed && 68 in keysPressed){
+			// if the user is pressing both keys return the arrow to robinhood - they can't shoot left and right at the same time!!
+			this.stopShooting();
+		}else{
 
-		
-		if(68 in keysPressed){
+			 if(68 in keysPressed){
 			//shooting prevents arrow from moving with character
 			shooting = true;
 			// if the spacebar is hit, shoot the arrow 50 pixels right, user can hold it to make it go farther
@@ -224,23 +227,28 @@ function Hero(name, image, speed){
 
 		}else if(65 in keysPressed){
 			shooting = true;
-			this.arrowLocation.destinationX = this.arrowLocation.x - 100; 
+			this.arrowLocation.destinationX = this.arrowLocation.x - 50; 
 			
 
 			// change the image source and make sure the character is shooting left
 			this.image.src = "possible-enemies-allies/archer3-left.png";
 			this.faceLeft = true;
 
-			if(arrowDamage ==2) {
+			if(arrowDamage == 2) {
 					this.arrowImage.src="Images/flaming-arrow2 left.png"
 			}else{
 					this.arrowImage.src = "Images/arrow-left.png";	
 			}
 
-		}else {
+		}
+		else {
 			shooting = false;
 			this.stopShooting();
+			}
+
 		}
+		
+		
 
 		
 		// if the arrow is within 10 pixels of its destination stop it
@@ -334,7 +342,10 @@ function Goblin(name){
 		&& ninja0.throwing === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			return true; 
+			this.health -= ninjaStarDamage;
+			ninja0.throwing = false;
+			ninja0.stopThrowing();
+			this.changeSpeed();
 		}
 	}
 
@@ -377,9 +388,9 @@ function Thug(name){
 	this.x = this.x = Math.random() * 440 + 40; 
 	this.y = this.y = Math.random() * 400 + 20; 
 	this.move = function(){
-		if (Math.abs(this.x - robinHood.x) < 32) {
+		if (Math.abs(this.x - robinHood.x) < 32){
 			this.catchRobinHood();
-		}else if(this.x < robinHood.x){
+		}else if(this.x <= robinHood.x){
 			this.x += 2 * this.speed;
 			this.image.src = "possible-enemies-allies/thug.png";
 		}else{
@@ -390,7 +401,8 @@ function Thug(name){
 		if (Math.abs(this.y - robinHood.y) < 32) {
 			this.catchRobinHood();
 		}else if(this.y > robinHood.y){
-			this.y -= 2 * this.speed;			
+			this.y -= 2 * this.speed;	
+
 
 		}else{
 			this.y += 2 * this.speed;
@@ -427,6 +439,20 @@ function Thug(name){
 			this.changeSpeed();
 		}
 	}
+
+	this.getHitByNinjaStar = function(){
+		if (
+			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 15
+		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 28 
+		&& ninja0.throwing === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= ninjaStarDamage;
+			ninja0.throwing = false;
+			ninja0.stopThrowing();
+			this.changeSpeed();
+		}
+	}
 	//changes the speed of the goblin and changes them to a coin if dead
 	this.changeSpeed = function() {
 		if (this.health == 5){
@@ -437,10 +463,10 @@ function Thug(name){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
-			var thugNumber = this.name.slice(4);			
+			// var thugNumber = this.name.slice(4);			
 
 			//change property in thug array to do nothing
-			thugArray[thugNumber] = "do nothing";
+			// thugArray[thugNumber] = "do nothing";
 
 			// change image source to nothing and increase gold
 			this.image.src = "";
@@ -511,7 +537,24 @@ function Golem(name){
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			return true; 			
+			this.health -= arrowDamage;
+			shooting = false;
+			robinHood.stopShooting();
+			this.changeSpeed();			
+		}
+	}
+
+	this.getHitByNinjaStar = function(){
+		if (
+			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 20
+		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 70
+		&& ninja0.throwing === true
+		){
+			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+			this.health -= ninjaStarDamage;
+			ninja0.throwing = false;
+			ninja0.stopThrowing();
+			this.changeSpeed();
 		}
 	}
 	//changes the speed of the goblin and adds gold if dead
@@ -526,11 +569,11 @@ function Golem(name){
 			this.speed = .05;
 		}
 		else if (this.health <= 0){
-			var golemNumber = this.name.slice(5);
+			// var golemNumber = this.name.slice(5);
 			
 
 			//change property in thug array to do nothing
-			golemArray[golemNumber] = "do nothing";
+			// golemArray[golemNumber] = "do nothing";
 
 			// change image source to nothing and increase gold
 			this.image.src = "";
@@ -913,53 +956,38 @@ function update(){
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
 		if(goblinArray[i].health <= 0){
-			// if the goblin's health is less than 0, there is no need to check to see if it got hit by anythig
+			// if the goblin's health is less than 0, there is no need to check to see if it got hit by anythig, whether it caught robinhood or make it move
 		}else{
 
-			// if the goblin gets hit by the arrow, execute the below code
-			if(goblinArray[i].getHitByArrow() === true){
-				goblinArray[i].health -= arrowDamage;
-				shooting = false;
-				robinHood.stopShooting();
-				goblinArray[i].changeSpeed();
-			}else if(goblinArray[i].getHitByNinjaStar() === true){
-				goblinArray[i].health -= ninjaStarDamage;
-				ninja0.throwing = false;
-				ninja0.stopThrowing();
-				goblinArray[i].changeSpeed();
-
-			}else{
-				goblinArray[i].move();	
-				goblinArray[i].catchRobinHood();
-			}
-
-			
-			//need to add catch robinhood function for goblins because they move randomly
-			
-			// goblinArray[i].getHitByNinjaStar();
-			// goblinArray[i].getHitByArrow();
-			
+			// if the goblin has more than 0 health move it and check to see the others			
+			goblinArray[i].move();
+			goblinArray[i].catchRobinHood();
+			goblinArray[i].getHitByNinjaStar();
+			goblinArray[i].getHitByArrow();			
 		}
 		
 	}
 	//a for loop that goes through all necessary updates for all thugs
 	for (var i = 0; i < thugArray.length; i++) {
 
-		if (thugArray[i] === "do nothing"){
-			
+		if (thugArray[i].health <= 0){
+			//do not move or allow this thug to get hit by arrows/ninja stars if his health is less than or equal to 0
 		}else{
+			// if it has greater than 0 health, it can move, get hit by ninja stars or catch robinhood
 			thugArray[i].move();
 			thugArray[i].getHitByArrow();
+			thugArray[i].getHitByNinjaStar();
 		}
 	}
 
 	for (var i = 0; i < golemArray.length; i++) {
 
-		if (golemArray[i] === "do nothing"){
+		if (golemArray[i].health <= 0){
 			
 		}else{
 			golemArray[i].move();
 			golemArray[i].getHitByArrow();
+			golemArray[i].getHitByNinjaStar();
 		}
 	}
 
@@ -1010,8 +1038,8 @@ function draw(){
 
 	for (var i = 0; i < thugArray.length; i++) {
 
-		if (thugArray[i] === "do nothing"){
-			//do nothing
+		if (thugArray[i].health <= 0){
+			// do not drwa this thug if his health is lower than 0
 			
 		}else{
 			context.drawImage(thugArray[i].image, thugArray[i].x, thugArray[i].y);
@@ -1020,7 +1048,7 @@ function draw(){
 
 	for (var i = 0; i < golemArray.length; i++) {
 
-		if (golemArray[i] === "do nothing"){
+		if (golemArray[i].health <= 0){
 			//do nothing
 			
 		}else{
