@@ -336,16 +336,18 @@ function Goblin(name){
 	}
 
 	this.getHitByNinjaStar = function(){
-		if (
-			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 15
-		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 28 
-		&& ninja0.throwing === true
-		){
-			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= ninjaStarDamage;
-			ninja0.throwing = false;
-			ninja0.stopThrowing();
-			this.changeSpeed();
+		for(var i = 0; i < ninjaArray.length; i++){
+			if (
+				Math.abs(ninjaArray[i].ninjaStarLocation.x - this.x) < 15
+			&& Math.abs(ninjaArray[i].ninjaStarLocation.y - this.y) < 30
+			&& ninjaArray[i].throwing === true
+			){
+				// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+				this.health -= ninjaStarDamage;			
+				ninjaArray[i].throwing = false;
+				ninjaArray[i].stopThrowing();
+				this.changeSpeed();
+			}
 		}
 	}
 
@@ -441,16 +443,18 @@ function Thug(name){
 	}
 
 	this.getHitByNinjaStar = function(){
-		if (
-			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 15
-		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 33
-		&& ninja0.throwing === true
-		){
-			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
-			this.health -= ninjaStarDamage;
-			ninja0.throwing = false;
-			ninja0.stopThrowing();
-			this.changeSpeed();
+		for(var i = 0; i < ninjaArray.length; i++){
+			if (
+				Math.abs(ninjaArray[i].ninjaStarLocation.x - this.x) < 15
+			&& Math.abs(ninjaArray[i].ninjaStarLocation.y - this.y) < 30
+			&& ninjaArray[i].throwing === true
+			){
+				// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
+				this.health -= ninjaStarDamage;			
+				ninjaArray[i].throwing = false;
+				ninjaArray[i].stopThrowing();
+				this.changeSpeed();
+			}
 		}
 	}
 	//changes the speed of the goblin and changes them to a coin if dead
@@ -826,8 +830,7 @@ function generateGolemNumber(){
 }
 
 function generateGolem(newGolem){
-	var golem = new Golem(newGolem);
-	console.log(golem);
+	var golem = new Golem(newGolem);	
 	golemArray.push(golem);
 	
 }
@@ -838,15 +841,22 @@ var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 //let's create a NINJA
 var ninjaArray = []; 
 
+var ninjaNumber = 0; 
 
+// create ninja generator
+function hireNinja(){
+	var newNinjaName = "ninja" + ninjaNumber; 
+	var newNinja = new Ninja(newNinjaName);
+	ninjaArray.push(newNinja)
+}
 var ninja0 = new Ninja("ninja0");
-var ninja1 = new Ninja("ninja1");
-var ninja2 = new Ninja("ninja2");
-var ninja3 = new Ninja("ninja3");
-var ninja4 = new Ninja("ninja4");
-var ninja5 = new Ninja("ninja5");
+// var ninja1 = new Ninja("ninja1");
+// var ninja2 = new Ninja("ninja2");
+// var ninja3 = new Ninja("ninja3");
+// var ninja4 = new Ninja("ninja4");
+// var ninja5 = new Ninja("ninja5");
 ninjaArray.push(ninja0);
-ninjaArray.push(ninja1, ninja2, ninja3,ninja4,ninja5);
+// ninjaArray.push(ninja1, ninja2, ninja3,ninja4,ninja5);
 // ----------------------------------------------------------
 // ----------------Shop Section here-------------------------
 // ----------------------------------------------------------
