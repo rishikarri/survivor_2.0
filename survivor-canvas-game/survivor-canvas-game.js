@@ -64,6 +64,11 @@ function monsterIntervalManager(clearMe){
 		clearInterval(thugInterval);
 		clearInterval(golemInterval);
 	}else{		
+		//clear interval and then set it incase user presses resume multiple times
+		clearInterval(goblinInterval);
+		clearInterval(thugInterval);
+		clearInterval(golemInterval);
+
 		goblinInterval = setInterval(generateGoblin, 5000);
 		thugInterval = setInterval(generateThug, 7000);
 		golemInterval = setInterval(generateGolem, 3000);
@@ -78,16 +83,26 @@ function startGame(){
 }
 
 
+function userPause(){
+	if (32 in keysPressed){
+		pauseGame();				
+	}
+}
+
 
 function pauseGame(){
 	gameOn = false;
 	monsterIntervalManager(true);
+	enableButton("resume-button");
 }
 
+// disable resume button from teh start
+disableButton("resume-button");
 function resumeGame(){
 	gameOn = true;
 	counterInterval = setInterval(updateCounter, 1000); //update the counter every second
 	monsterIntervalManager(false);
+	disableButton("resume-button");
 	// var goblinInterval = setInterval(generateGoblinNumber, 5000);
 	// var golemInterval = setInterval(generateGolemNumber, 35000);
 	// var thugInterval = setInterval(generateThugNumber, 7000);
@@ -97,12 +112,11 @@ function openShop(){
 	// pause ggame so it's not running in the background
 	gameOn = false;
 	monsterIntervalManager(false);
+	enableButton("resume-button");
 
 }
 
-function clearMonsterIntervals(){
 
-}
 
 // CREATE EVENT LISTENERS
 
@@ -839,6 +853,9 @@ function hireNinja(){
 	var newNinja = new Ninja(newNinjaName);
 	ninjaArray.push(newNinja);
 	ninjaNumber++;
+	robinHood.gold -= 700; 
+	document.getElementById("gold-collected").innerHTML = robinHood.gold;
+	checkPurchasingAbility();
 }
 
 // ----------------------------------------------------------
@@ -886,14 +903,24 @@ function enableButton(buttonString){
 
 // check to see what robinHood can purchase
 function checkPurchasingAbility(){
-	if (robinHood.gold < 10){
-	disableButton("health-potion-button");	
-	}else{
-	enableButton("health-potion-button")
+	if (robinHood.gold < 50){
+		disableButton("health-potion-button");	
+		disableButton("speed-potion-button");	
+		disableButton("fire-arrows-button");	
+		disableButton("ninja-button");
+	}else if (robinHood.gold < 300){
+		disableButton("speed-potion-button");	
+		disableButton("fire-arrows-button");	
+		disableButton("ninja-button");
+	}else if(robinHood.gold < 500){
+		disableButton("speed-potion-button");	
+		disableButton("ninja-button");
+	}else if(robinHood.gold < 700){
+		disableButton("ninja-button");
 	}
 }
 
-
+robinHood.gold +=1000;
 
 function drinkHealthPotion(){
 	// when user buys and drinks potion, increase health by 3, decrease gold by 50
@@ -912,6 +939,8 @@ function drinkSpeedPotion(){
 	document.getElementById("textDisplay").innerHTML = "SPEED BOOST!";
 	document.getElementById("textDisplay").style.color = "green"; 
 	setTimeout(clearDisplay, 8000);
+
+	checkPurchasingAbility();
 
 
 }
@@ -935,6 +964,7 @@ function giveHeroFireArrows(){
 	document.getElementById("textDisplay").style.color = "firebrick"; 
 	setTimeout(clearDisplay, 8000);
 	
+	checkPurchasingAbility();
 
 }
 
@@ -950,6 +980,7 @@ function giveHeroFireArrows(){
 
 
 function update(){
+	userPause(keysPressed);
 	robinHood.move(keysPressed);
 	robinHood.shoot(keysPressed);
 	robinHood.arrowFollow();
