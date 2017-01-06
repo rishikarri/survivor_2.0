@@ -64,9 +64,9 @@ function monsterIntervalManager(clearMe){
 		clearInterval(thugInterval);
 		clearInterval(golemInterval);
 	}else{		
-		goblinInterval = setInterval(generateGoblinNumber, 5000);
-		thugInterval = setInterval(generateThugNumber, 7000);
-		golemInterval = setInterval(generateGolemNumber, 3000);
+		goblinInterval = setInterval(generateGoblin, 5000);
+		thugInterval = setInterval(generateThug, 7000);
+		golemInterval = setInterval(generateGolem, 3000);
 	}
 }
 
@@ -773,19 +773,12 @@ var goblin1 = new Goblin("goblin1");
 
 
 var goblinNumber = 2;
-function generateGoblinNumber(){
 
-	//create a goblin with a number at the end - first one generated will be goblin2
-	var newGoblin = "goblin" + goblinNumber;
-	//add 1 to the goblin number so that the next goblin generated will be goblin 
-	goblinNumber++;
-	// send the newGoblin to the goblin GEnerator
-	generateGoblin(newGoblin);
-}
-
-function generateGoblin(newGoblin){
-	var newGoblin = new Goblin(newGoblin);
+function generateGoblin(){
+	var newGoblinName = "goblin" + goblinNumber;
+	var newGoblin = new Goblin(newGoblinName);
 	goblinArray.push(newGoblin);
+	goblinNumber++;
 }
 
 // create a goblin array
@@ -801,15 +794,12 @@ var thug0 = new Thug("thug0");
 thugArray.push(thug0);
 var thugNumber = 1;
 
-function generateThugNumber(){
-	var newThug = "thug"+thugNumber;
-	thugNumber++;
-	generateThug(newThug);
-}
 
-function generateThug(newThug){
-	var newThug = new Thug(newThug);
+function generateThug(){
+	var newThugName = "thug"+thugNumber;
+	var newThug = new Thug(newThugName);
 	thugArray.push(newThug);
+	thugNumber++
 	
 }
 // ----------------------GOLEMS-----------------------------
@@ -823,40 +813,34 @@ var golemArray = [];
 // golemArray.push(golem0);
 var golemNumber = 0; 
 
-function generateGolemNumber(){
-	var newGolem = "golem" + golemNumber;
-	golemNumber++;
-	generateGolem(newGolem);
-}
+// function generateGolemNumber(){
+// 	var newGolem = "golem" + golemNumber;
+// 	golemNumber++;
+// 	generateGolem(newGolem);
+// }
 
-function generateGolem(newGolem){
-	var golem = new Golem(newGolem);	
-	golemArray.push(golem);
+function generateGolem(){
+	var newGolemName = "golem" + golemNumber;
+	var newGolem = new Golem(newGolemName);	
+	golemArray.push(newGolem);
+	golemNumber++;
 	
 }
 
 // HERO section
 var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
-//let's create a NINJA
+//let's create some NINJAs when the user hires them
 var ninjaArray = []; 
-
 var ninjaNumber = 0; 
-
 // create ninja generator
 function hireNinja(){
 	var newNinjaName = "ninja" + ninjaNumber; 
 	var newNinja = new Ninja(newNinjaName);
-	ninjaArray.push(newNinja)
+	ninjaArray.push(newNinja);
+	ninjaNumber++;
 }
-var ninja0 = new Ninja("ninja0");
-// var ninja1 = new Ninja("ninja1");
-// var ninja2 = new Ninja("ninja2");
-// var ninja3 = new Ninja("ninja3");
-// var ninja4 = new Ninja("ninja4");
-// var ninja5 = new Ninja("ninja5");
-ninjaArray.push(ninja0);
-// ninjaArray.push(ninja1, ninja2, ninja3,ninja4,ninja5);
+
 // ----------------------------------------------------------
 // ----------------Shop Section here-------------------------
 // ----------------------------------------------------------
