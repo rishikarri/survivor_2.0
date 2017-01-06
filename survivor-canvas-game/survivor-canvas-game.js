@@ -845,17 +845,29 @@ function generateGolem(){
 var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
 //let's create some NINJAs when the user hires them
-var ninjaArray = []; 
-var ninjaNumber = 0; 
-// create ninja generator
-function hireNinja(){
-	var newNinjaName = "ninja" + ninjaNumber; 
-	var newNinja = new Ninja(newNinjaName);
-	ninjaArray.push(newNinja);
-	ninjaNumber++;
-	robinHood.gold -= 700; 
-	document.getElementById("gold-collected").innerHTML = robinHood.gold;
-	checkPurchasingAbility();
+
+
+// ----------------------------------------------------------
+// ----------------Instructions Section here-----------------
+// ----------------------------------------------------------
+
+var modalInstructions = document.getElementById('modal-instructions');
+var closeInstructions = document.getElementsByClassName("close-instructions")[0];
+
+function viewInstructions(){
+	modalInstructions.style.display = "block";
+	pauseGame();
+}
+
+closeInstructions.onclick = function(){
+	modalInstructions.style.display="none";
+}
+
+//ask rob
+window.onclick = function(event) {
+    if (event.target == modalInstructions) {
+        modalInstructions.style.display = "none";
+    }
 }
 
 // ----------------------------------------------------------
@@ -887,6 +899,8 @@ window.onclick = function(event) {
         modalShop.style.display = "none";
     }
 }
+
+
 
 //after the user opens up shop - below is the code for using / purchasing items after 
 
@@ -920,7 +934,7 @@ function checkPurchasingAbility(){
 	}
 }
 
-robinHood.gold +=1000;
+
 
 function drinkHealthPotion(){
 	// when user buys and drinks potion, increase health by 3, decrease gold by 50
@@ -931,6 +945,19 @@ function drinkHealthPotion(){
 	checkPurchasingAbility();	
 }
 
+var ninjaArray = []; 
+var ninjaNumber = 0; 
+// create ninja generator
+function hireNinja(){
+	var newNinjaName = "ninja" + ninjaNumber; 
+	var newNinja = new Ninja(newNinjaName);
+	ninjaArray.push(newNinja);
+	ninjaNumber++;
+	robinHood.gold -= 700; 
+	document.getElementById("gold-collected").innerHTML = robinHood.gold;
+	checkPurchasingAbility();
+}
+
 function drinkSpeedPotion(){
 	robinHood.speed = 1.9;
 	robinHood.gold -= 500;
@@ -939,7 +966,7 @@ function drinkSpeedPotion(){
 	document.getElementById("textDisplay").innerHTML = "SPEED BOOST!";
 	document.getElementById("textDisplay").style.color = "green"; 
 	setTimeout(clearDisplay, 8000);
-
+	disableButton('speed-potion-button')
 	checkPurchasingAbility();
 
 
@@ -964,6 +991,8 @@ function giveHeroFireArrows(){
 	document.getElementById("textDisplay").style.color = "firebrick"; 
 	setTimeout(clearDisplay, 8000);
 	
+	//disable fire arrows - don't want user to buy them twice! 
+	disableButton('fire-arrows-button')
 	checkPurchasingAbility();
 
 }
@@ -1105,7 +1134,7 @@ function draw(){
 
 }
 
-	
+robinHood.gold += 100000;
 draw();	
 
 
