@@ -429,7 +429,7 @@ function Thug(name){
 	this.getHitByArrow = function() {
 		if (
 			Math.abs(robinHood.arrowLocation.x - this.x) < 15
-		&& Math.abs(robinHood.arrowLocation.y - this.y) < 28
+		&& Math.abs(robinHood.arrowLocation.y - this.y) < 33
 		&& shooting === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
@@ -443,7 +443,7 @@ function Thug(name){
 	this.getHitByNinjaStar = function(){
 		if (
 			Math.abs(ninja0.ninjaStarLocation.x - this.x) < 15
-		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 28 
+		&& Math.abs(ninja0.ninjaStarLocation.y - this.y) < 33
 		&& ninja0.throwing === true
 		){
 			// if the goblin gets hit by the arrow, it loses health, robinhood stops shooting and teh goblin slows
@@ -831,8 +831,11 @@ function generateGolem(newGolem){
 var robinHood = new Hero("Robin Hood","possible-enemies-allies/archer3.png", 1);
 
 //let's create a NINJA
+var ninjaArray = []; 
+
 
 var ninja0 = new Ninja("ninja0");
+ninjaArray.push(ninja0);
 // ----------------------------------------------------------
 // ----------------Shop Section here-------------------------
 // ----------------------------------------------------------
@@ -949,9 +952,11 @@ function update(){
 	checkIfHighScore();
 
 
-	ninja0.move(); 	
-	ninja0.moveNinjaStar();		
-	ninja0.ninjaStarFollow();
+	for(var i = 0; i < ninjaArray.length; i++){
+		ninjaArray[i].move();
+		ninjaArray[i].moveNinjaStar();
+		ninjaArray[i].ninjaStarFollow();
+	}	
 	
 	// a for loop that goes through all necessary updates for all goblins
 	for (var i = 0; i < goblinArray.length; i++) {
@@ -1020,8 +1025,8 @@ function draw(){
 	// context.drawImage(golem0.image, golem0.x, golem0.y);
 	context.drawImage(robinHood.image, robinHood.x, robinHood.y);
 	context.drawImage(robinHood.arrowImage, robinHood.arrowLocation.x, robinHood.arrowLocation.y);
-	context.drawImage(ninja0.image, ninja0.x, ninja0.y);
-	context.drawImage(ninja0.ninjaStarImage, ninja0.ninjaStarLocation.x, ninja0.ninjaStarLocation.y);
+	// context.drawImage(ninja0.image, ninja0.x, ninja0.y);
+	// context.drawImage(ninja0.ninjaStarImage, ninja0.ninjaStarLocation.x, ninja0.ninjaStarLocation.y);
 	//a for loop that draws and moves all the goblins in the arrray
 	for (var i = 0; i < goblinArray.length; i++) {
 
@@ -1054,6 +1059,12 @@ function draw(){
 		}else{
 			context.drawImage(golemArray[i].image, golemArray[i].x, golemArray[i].y);
 		}
+	}
+
+	for (var i = 0; i < ninjaArray.length; i++){
+		context.drawImage(ninjaArray[i].image, ninjaArray[i].x, ninjaArray[i].y);
+		context.drawImage(ninjaArray[i].ninjaStarImage, ninjaArray[i].ninjaStarLocation.x, ninjaArray[i].ninjaStarLocation.y);
+
 	}
 
 }
