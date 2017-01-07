@@ -1134,7 +1134,6 @@ function draw(){
 
 }
 
-robinHood.gold += 100000;
 draw();	
 
 
