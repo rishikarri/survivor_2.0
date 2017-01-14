@@ -71,7 +71,7 @@ function monsterIntervalManager(clearMe){
 
 		goblinInterval = setInterval(generateGoblin, 5000);
 		thugInterval = setInterval(generateThug, 7000);
-		golemInterval = setInterval(generateGolem, 3000);
+		golemInterval = setInterval(generateGolem, 35000);
 	}
 }
 
@@ -1000,7 +1000,7 @@ function giveHeroFireArrows(){
 
 	
 
-
+robinHood.gold += 10000;
 
 
 // ----------------------------------------------------------
