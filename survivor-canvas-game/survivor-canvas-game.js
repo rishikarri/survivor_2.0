@@ -10,7 +10,7 @@ document.getElementById("middle-section").appendChild(canvas);
 var backgroundImage = new Image(); 
 backgroundImage.src = "Images/background2.jpeg";
 
-
+//
 // ----------------------------------------------------------
 // ----------------------GLOBALS-----------------------------
 // ----------------------------------------------------------
